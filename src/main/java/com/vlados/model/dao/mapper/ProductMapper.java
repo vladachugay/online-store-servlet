@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class ProductMapper implements ObjectMapper<Product> {
     @Override
-    public Product extractWithoutRelationsFromResultSet(ResultSet rs) throws SQLException {
+    public Product extractFromResultSet(ResultSet rs) throws SQLException {
         return null;
     }
 

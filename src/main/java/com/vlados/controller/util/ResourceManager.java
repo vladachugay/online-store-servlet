@@ -9,7 +9,13 @@ public class ResourceManager {
     private static final ResourceBundle resourceBundleUa = ResourceBundle.getBundle(BUNDLE_NAME, new Locale("ua"));
 
     public static String getMessage(String key, Locale locale) {
-        return locale.equals(Locale.ENGLISH) ? resourceBundleEn.getString(key) :
-                resourceBundleUa.getString(key);
+        try {
+            return locale.equals(Locale.ENGLISH) ? resourceBundleEn.getString(key) :
+                    resourceBundleUa.getString(key);
+        } catch (NullPointerException ex) {
+            System.out.println(key);
+            System.out.println(locale);
+        }
+        return key;
     }
 }

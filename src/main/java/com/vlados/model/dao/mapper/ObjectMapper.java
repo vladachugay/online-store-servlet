@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.Map;
 
 public interface ObjectMapper<T> {
-    T extractWithoutRelationsFromResultSet(ResultSet rs) throws SQLException;
+    T extractFromResultSet(ResultSet rs) throws SQLException;
 
     T makeUnique(Map<Long, T> cache, T entity);
 }

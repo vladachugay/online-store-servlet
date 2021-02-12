@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class OrderMapper implements ObjectMapper<Order>{
     @Override
-    public Order extractWithoutRelationsFromResultSet(ResultSet rs) throws SQLException {
+    public Order extractFromResultSet(ResultSet rs) throws SQLException {
         return null;
     }
 

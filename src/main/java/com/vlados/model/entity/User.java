@@ -101,6 +101,10 @@ public class User {
         this.role = role;
     }
 
+    public static User.UserBuilder builder() {
+        return new User.UserBuilder();
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

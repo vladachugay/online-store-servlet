@@ -2,7 +2,9 @@ package com.vlados.controller;
 
 import com.vlados.controller.command.Command;
 import com.vlados.controller.command.GetLoginPageCommand;
+import com.vlados.controller.command.GetProductsCommand;
 import com.vlados.controller.command.IndexCommand;
+import com.vlados.controller.command.guest.LogInCommand;
 import com.vlados.controller.util.ResourceManager;
 import com.vlados.model.service.ServiceFactory;
 
@@ -30,12 +32,20 @@ public class MainServlet extends HttpServlet {
         config.getServletContext().setAttribute("loggedUsers", new HashSet<String>());
         ServiceFactory serviceFactory = ServiceFactory.getInstance();
         putGetCommands(serviceFactory);
-        //TODO: putPostCommands(serviceFactory);
+        putPostCommands(serviceFactory);
     }
 
     private void putGetCommands(ServiceFactory serviceFactory) {
         getCommands.put("", new IndexCommand());
         getCommands.put("login", new GetLoginPageCommand());
+        getCommands.put("user/products", new GetProductsCommand());
+        getCommands.put("admin/products", new GetProductsCommand());
+        getCommands.put("products", new GetProductsCommand());
+    }
+
+    private void putPostCommands(ServiceFactory serviceFactory) {
+        postCommands.put("login", new LogInCommand(serviceFactory.createUserService()));
+
     }
 
     @Override
@@ -70,10 +80,7 @@ public class MainServlet extends HttpServlet {
         try {
             result = command.execute(request);
         } catch (Exception e) {
-            Locale locale = request.getSession().getAttribute("lang").toString().equals("en")
-                    ? Locale.ENGLISH
-                    : new Locale("ua");
-            response.getWriter().print(ResourceManager.getMessage(e.getMessage(), locale));
+            //todo exception
             return;
         }
 
