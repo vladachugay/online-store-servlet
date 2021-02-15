@@ -82,6 +82,9 @@ public class UserDTO {
         this.role = role;
     }
 
+    public static UserDTO.UserDTOBuilder builder() {
+        return new UserDTO.UserDTOBuilder();
+    }
     @Override
     public String toString() {
         return "UserDTO{" +

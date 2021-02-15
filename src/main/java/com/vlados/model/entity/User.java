@@ -1,5 +1,8 @@
 package com.vlados.model.entity;
 
+import com.vlados.model.dto.UserDTO;
+
+import java.util.Collections;
 import java.util.Objects;
 
 public class User {
@@ -12,6 +15,16 @@ public class User {
     private String phoneNumber;
     private boolean locked;
     private Role role;
+
+    public User(UserDTO userDTO) {
+        this.username = userDTO.getUsername();
+        this.password = userDTO.getPassword();
+        this.fullName = userDTO.getFullName();
+        this.email = userDTO.getEmail();
+        this.phoneNumber = userDTO.getPhoneNumber();
+        this.locked = userDTO.isLocked();
+        this.role = Role.valueOf(userDTO.getRole());
+    }
 
 
     public enum Role {

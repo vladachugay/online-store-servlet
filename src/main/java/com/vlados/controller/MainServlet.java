@@ -1,11 +1,7 @@
 package com.vlados.controller;
 
-import com.vlados.controller.command.Command;
-import com.vlados.controller.command.GetLoginPageCommand;
-import com.vlados.controller.command.GetProductsCommand;
-import com.vlados.controller.command.IndexCommand;
-import com.vlados.controller.command.guest.LogInCommand;
-import com.vlados.controller.util.ResourceManager;
+import com.vlados.controller.command.*;
+import com.vlados.controller.command.guest.*;
 import com.vlados.model.service.ServiceFactory;
 
 import javax.servlet.ServletConfig;
@@ -15,7 +11,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -38,13 +33,17 @@ public class MainServlet extends HttpServlet {
     private void putGetCommands(ServiceFactory serviceFactory) {
         getCommands.put("", new IndexCommand());
         getCommands.put("login", new GetLoginPageCommand());
-        getCommands.put("user/products", new GetProductsCommand());
-        getCommands.put("admin/products", new GetProductsCommand());
-        getCommands.put("products", new GetProductsCommand());
+        getCommands.put("user/products", new GetProductsUserCommand(serviceFactory.createProductService()));
+        getCommands.put("admin/products", new GetProductsAdminCommand(serviceFactory.createProductService()));
+        getCommands.put("products", new GetProductsUserCommand(serviceFactory.createProductService()));
+        getCommands.put("registration", new GetRegistrationPageCommand());
+        getCommands.put("logout", new LogOutCommand());
+        getCommands.put("admin", new GetAdminPanelCommand(ServiceFactory));
     }
 
     private void putPostCommands(ServiceFactory serviceFactory) {
         postCommands.put("login", new LogInCommand(serviceFactory.createUserService()));
+        postCommands.put("registration", new RegistrationCommand(serviceFactory.createUserService()));
 
     }
 

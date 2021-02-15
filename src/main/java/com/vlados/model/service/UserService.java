@@ -3,6 +3,7 @@ package com.vlados.model.service;
 import com.vlados.controller.util.PasswordEncoder;
 import com.vlados.model.dao.DaoFactory;
 import com.vlados.model.dao.UserDao;
+import com.vlados.model.dto.UserDTO;
 import com.vlados.model.entity.User;
 
 public class UserService {
@@ -20,10 +21,24 @@ public class UserService {
             User user = userDao.findByUsername(username).get();
             System.out.println(user);
             //TODO: orElseThrow() - throw exception.
-            if (!user.getPassword().equals(password)) {
+            if (!user.getPassword().equals(passwordEncoder.encode(password))) {
                 //TODO throw exception;
             }
             return user.getRole();
         }
+    }
+
+    public void saveUser(UserDTO userDTO) {
+        userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        userDTO.setRole(User.Role.USER.name());
+        userDTO.setLocked(false);
+
+        try (UserDao userDao = daoFactory.createUserDao()) {
+            userDao.create(new User(userDTO));
+        } catch (Exception e) {
+            //TODO throw exception
+            //TODO log
+        }
+
     }
 }

@@ -37,8 +37,21 @@ public class JDBCUserDao implements UserDao {
     }
 
     @Override
-    public void create(User entity) {
-
+    public void create(User user) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(UserQueries.CREATE)) {
+            preparedStatement.setString(1, user.getFullName());
+            preparedStatement.setString(2, user.getUsername());
+            preparedStatement.setString(3, user.getPassword());
+            preparedStatement.setString(4, user.getPhoneNumber());
+            preparedStatement.setString(5, user.getEmail());
+            preparedStatement.setString(6, user.getRole().name());
+            preparedStatement.setBoolean(7, user.isLocked());
+            preparedStatement.execute();
+        } catch (SQLException e) {
+            //TODO throw exception
+            //TODO log
+            System.err.println("Cant add new user");
+        }
     }
 
     @Override
