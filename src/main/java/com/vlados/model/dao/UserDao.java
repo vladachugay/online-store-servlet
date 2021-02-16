@@ -7,4 +7,7 @@ import java.util.Optional;
 public interface UserDao extends GenericDao<User> {
     Optional<User> findByUsername(String username);
 
+    boolean lockUserById(Long id);
+
+    boolean unlockUserById(Long id);
 }

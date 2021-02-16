@@ -26,15 +26,16 @@ public class LogInCommand implements Command {
         try {
             role = userService.checkUserAndGetRole(username, pass);
         } catch (Exception e) {
-            //TODO: redirect
+            System.err.println("");
+            //TODO: handle exception
         }
 
         if (CommandUtility.checkUserIsLogged(request, username)) {
-            //TODO redirect error
+            //TODO handle exception
+            System.err.println("user has already logged in");
             return "login.jsp";
         }
         CommandUtility.setUserRole(request, username, role);
-        System.out.println(role);
         switch (role) {
             case USER: return USER_REDIRECT;
             case ADMIN: return ADMIN_REDIRECT;

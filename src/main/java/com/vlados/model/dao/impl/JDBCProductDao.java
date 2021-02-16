@@ -5,10 +5,7 @@ import com.vlados.model.dao.impl.query.ProductQueries;
 import com.vlados.model.dao.mapper.ProductMapper;
 import com.vlados.model.entity.Product;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -32,8 +29,23 @@ public class JDBCProductDao implements ProductDao {
     }
 
     @Override
-    public void create(Product entity) {
-
+    public boolean create(Product product) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(ProductQueries.CREATE)) {
+            preparedStatement.setString(1, product.getName());
+            preparedStatement.setBigDecimal(2, product.getPrice());
+            preparedStatement.setString(3, product.getCategory().name());
+            preparedStatement.setString(4, product.getMaterial().name());
+            preparedStatement.setString(5, product.getPicPath());
+            preparedStatement.setTimestamp(6, Timestamp.valueOf(product.getDate()));
+            preparedStatement.setString(7, product.getDescription());
+            preparedStatement.setInt(8, product.getAmount());
+            System.out.println("dao statement: " + preparedStatement);
+            return preparedStatement.execute();
+        } catch (SQLException e) {
+            //TODO handle exception
+            System.err.println("cant add new product");
+        }
+        return false;
     }
 
     @Override
@@ -69,6 +81,10 @@ public class JDBCProductDao implements ProductDao {
 
     @Override
     public void close() {
-
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

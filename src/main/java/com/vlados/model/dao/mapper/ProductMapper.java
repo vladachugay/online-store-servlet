@@ -10,7 +10,7 @@ public class ProductMapper implements ObjectMapper<Product> {
     @Override
     public Product extractFromResultSet(ResultSet rs) throws SQLException {
         return Product.builder()
-                .id(rs.getLong("id"))
+                .id(rs.getLong("product_id"))
                 .name(rs.getString("name"))
                 .category(Product.Category.valueOf(rs.getString("category")))
                 .material(Product.Material.valueOf(rs.getString("material")))

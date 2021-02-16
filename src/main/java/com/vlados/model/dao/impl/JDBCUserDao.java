@@ -5,10 +5,8 @@ import com.vlados.model.dao.impl.query.UserQueries;
 import com.vlados.model.dao.mapper.UserMapper;
 import com.vlados.model.entity.User;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,13 +29,41 @@ public class JDBCUserDao implements UserDao {
                 user = userMapper.extractFromResultSet(rs);
             }
         } catch (SQLException e) {
+            System.err.println("cant find user");
             throw new RuntimeException();
         }
+        System.out.println(user);
         return Optional.ofNullable(user);
     }
 
     @Override
-    public void create(User user) {
+    public boolean lockUserById(Long id) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(UserQueries.LOCK_USER)) {
+            preparedStatement.setLong(1, id);
+            return preparedStatement.execute();
+        } catch (SQLException ex) {
+            //TODO handle exception
+            //TODO log
+            System.err.println("cant lock user");
+        }
+        return false;
+    }
+
+    @Override
+    public boolean unlockUserById(Long id) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(UserQueries.UNLOCK_USER)) {
+            preparedStatement.setLong(1, id);
+            return preparedStatement.execute();
+        } catch (SQLException ex) {
+            //TODO handle exception
+            //TODO log
+            System.err.println("cant unlock user");
+        }
+        return false;
+    }
+
+    @Override
+    public boolean create(User user) {
         try (PreparedStatement preparedStatement = connection.prepareStatement(UserQueries.CREATE)) {
             preparedStatement.setString(1, user.getFullName());
             preparedStatement.setString(2, user.getUsername());
@@ -46,12 +72,13 @@ public class JDBCUserDao implements UserDao {
             preparedStatement.setString(5, user.getEmail());
             preparedStatement.setString(6, user.getRole().name());
             preparedStatement.setBoolean(7, user.isLocked());
-            preparedStatement.execute();
+            return preparedStatement.execute();
         } catch (SQLException e) {
             //TODO throw exception
             //TODO log
             System.err.println("Cant add new user");
         }
+        return false;
     }
 
     @Override
@@ -61,7 +88,18 @@ public class JDBCUserDao implements UserDao {
 
     @Override
     public List<User> findAll() {
-        return null;
+        List<User> users = new ArrayList<>();
+        try (Statement statement = connection.createStatement()) {
+            ResultSet rs = statement.executeQuery(UserQueries.FIND_ALL_SORTED);
+            while (rs.next()) {
+                users.add(userMapper.extractFromResultSet(rs));
+            }
+        } catch (SQLException ex) {
+            //TODO log
+            //TODO handle exception
+            System.err.println(ex.getMessage());
+        }
+        return users;
     }
 
     @Override
@@ -76,6 +114,10 @@ public class JDBCUserDao implements UserDao {
 
     @Override
     public void close() {
-
+        try {
+            connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

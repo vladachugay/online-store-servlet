@@ -10,4 +10,6 @@ public interface OrderDao extends GenericDao<Order> {
     void changeStatus(Long id, Order.Status status);
 
     List<Order> findByUser(User user);
+
+    List<Order> findAllWithUsers();
 }

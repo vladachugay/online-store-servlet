@@ -166,6 +166,7 @@ public class ProductDTO {
         }
 
         public ProductDTO build() {
+            System.out.println("build");
             return new ProductDTO(name, category, material, picPath, date, description, price, amount);
         }
     }

@@ -38,13 +38,17 @@ public class MainServlet extends HttpServlet {
         getCommands.put("products", new GetProductsUserCommand(serviceFactory.createProductService()));
         getCommands.put("registration", new GetRegistrationPageCommand());
         getCommands.put("logout", new LogOutCommand());
-        getCommands.put("admin", new GetAdminPanelCommand(ServiceFactory));
+        getCommands.put("admin", new GetAdminPanelCommand(serviceFactory.createOrderService()));
+        getCommands.put("admin/users", new GetUsersPageCommand(serviceFactory.createUserService()));
+        getCommands.put("admin/products/add", new GetAddProductPage());
     }
 
     private void putPostCommands(ServiceFactory serviceFactory) {
         postCommands.put("login", new LogInCommand(serviceFactory.createUserService()));
         postCommands.put("registration", new RegistrationCommand(serviceFactory.createUserService()));
-
+        postCommands.put("admin/users/lock/\\d+", new LockUserCommand(serviceFactory.createUserService()));
+        postCommands.put("admin/users/unlock/\\d+", new UnlockUserCommand(serviceFactory.createUserService()));
+        postCommands.put("admin/products/add", new AddProductCommand(serviceFactory.createProductService()));
     }
 
     @Override

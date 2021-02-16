@@ -21,7 +21,7 @@ public class OrderService {
 
     public List<Order> getOrders() {
         try (OrderDao orderDao = daoFactory.createOrderDao()) {
-            return orderDao.findAll();
+            return orderDao.findAllWithUsers();
         }
     }
 }

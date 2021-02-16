@@ -6,6 +6,9 @@ import com.vlados.model.dao.UserDao;
 import com.vlados.model.dto.UserDTO;
 import com.vlados.model.entity.User;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+
 public class UserService {
     private final DaoFactory daoFactory;
     private final PasswordEncoder passwordEncoder;
@@ -23,6 +26,7 @@ public class UserService {
             //TODO: orElseThrow() - throw exception.
             if (!user.getPassword().equals(passwordEncoder.encode(password))) {
                 //TODO throw exception;
+                System.err.println("wrong password");
             }
             return user.getRole();
         }
@@ -40,5 +44,29 @@ public class UserService {
             //TODO log
         }
 
+    }
+
+    public List<User> getUsers() {
+        try (UserDao userDao = daoFactory.createUserDao()) {
+            return userDao.findAll();
+        }
+    }
+
+    public boolean lockUser(Long id) {
+        try (UserDao userDao = daoFactory.createUserDao()) {
+            return userDao.lockUserById(id);
+        } catch (Exception e) {
+            System.err.println("Cant lock user");
+        }
+        return false;
+    }
+
+    public boolean unlockUser(Long id) {
+        try (UserDao userDao = daoFactory.createUserDao()) {
+            return userDao.lockUserById(id);
+        } catch (Exception e) {
+            System.err.println("Cant lock user");
+        }
+        return false;
     }
 }
