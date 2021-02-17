@@ -103,24 +103,24 @@
         </div>
     </div>
     <div class="row">
-        <c:forEach var="product" items="${products}">
+        <c:forEach var="product" items="${requestScope.products}">
         <div class="col-md-4 my-3">
             <div class="card">
                 <img class="card-img-top" src="${product.picPath}">
                 <div class="card-body">
                     <h5 class="card-title">
 <%--                        <a th:href="@{/products/} + ${product.id}" th:text="${product.name}"></a>--%>
-                        <a href="#"><c:out value="${product.name}"/></a>
+                        <a href="/admin/products/<c:out value="${product.id}"/>">
+                            <c:out value="${product.name}"/>
+                        </a>
                     </h5>
                     <p class="card-text"><fmt:message key="${product.category}"/> </p>
                     <p class="card-text"><fmt:message key="${product.material}"/></p>
                     <p class="card-text"><c:out value="${product.price}"/></p>
-                    <a href="#"
-<%--                            href="@{/products/edit/} + ${product.id}"--%>
-                       class="btn btn-outline-secondary mr-1"
-                       ><fmt:message key="product.edit"/></a>
-                    <form <fmt:message key="product.edit"/>
-<%--                            action="@{/products/delete/} + ${product.id}" method="post">--%>
+                    <a href="/admin/products/edit/<c:out value="${product.id}"/>" class="btn btn-outline-secondary mr-1">
+                        <fmt:message key="product.edit"/>
+                    </a>
+                    <form action="/admin/products/delete/<c:out value="${product.id}"/>" method="post">
                         <button type="submit" class="btn btn-outline-danger my-2"><fmt:message key="product.delete"/></button>
                     </form>
                 </div>

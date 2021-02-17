@@ -28,6 +28,7 @@ public class AuthFilter implements Filter {
         HttpServletRequest req = (HttpServletRequest) servletRequest;
         HttpServletResponse resp = (HttpServletResponse) servletResponse;
         HttpSession session = req.getSession();
+
         if (session.getAttribute("role") == null) {
             session.setAttribute("role", User.Role.UNKNOWN.toString());
             session.setAttribute("username", "Guest");

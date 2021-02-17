@@ -1,11 +1,16 @@
 package com.vlados.model.service;
 
+import com.sun.org.apache.xpath.internal.operations.Or;
 import com.vlados.model.dao.DaoFactory;
 import com.vlados.model.dao.OrderDao;
 import com.vlados.model.dao.ProductDao;
-import com.vlados.model.entity.Order;
+import com.vlados.model.entity.*;
 
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class OrderService {
 
@@ -24,4 +29,38 @@ public class OrderService {
             return orderDao.findAllWithUsers();
         }
     }
+
+    //Transaction
+    public boolean createOrder(Cart cart, String username) {
+        Order order = Order.builder()
+                .status(Order.Status.REGISTERED)
+                .totalPrice(cart.getTotalPrice())
+                .creationDate(LocalDateTime.now())
+                .user(userService.findByUserName(username))
+                .build();
+
+        try (OrderDao orderDao = daoFactory.createOrderDao()) {
+            //TODO open transaction
+            order.setId(orderDao.createAndGetNewId(order));
+            fillOrderProducts(cart, order);
+            orderDao.addProductsToOrder(order);
+            for (OrderProducts op : order.getOrderProducts()) {
+                productService.reduceAmountById(op.getProduct().getId(), op.getAmount());
+            }
+            //TODO commit transaction
+            return true;
+        } catch (Exception e) {
+            System.err.println("cant create order");
+            //TODO rollback
+            return false;
+        }
+    }
+
+    public void fillOrderProducts(Cart cart, Order order) {
+        for (Map.Entry<Product, Integer> pair : cart.getCartProducts().entrySet()) {
+            order.getOrderProducts().add(new OrderProducts(order, pair.getKey(), pair.getValue()));
+        }
+    }
+
+
 }

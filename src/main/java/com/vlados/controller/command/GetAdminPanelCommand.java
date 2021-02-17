@@ -15,7 +15,7 @@ public class GetAdminPanelCommand implements Command{
     @Override
     public String execute(HttpServletRequest request) {
         request.setAttribute("orders", orderService.getOrders());
-        request.setAttribute("statuses", Order.Status.values());
+        request.setAttribute("registered", Order.Status.REGISTERED);
         return "/WEB-INF/admin/adminPanel.jsp";
     }
 }

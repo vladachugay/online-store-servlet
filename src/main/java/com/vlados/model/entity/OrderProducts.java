@@ -5,13 +5,13 @@ import java.util.Objects;
 public class OrderProducts {
     private Order order;
     private Product product;
-    private Long amount;
+    private int amount;
 
     public OrderProducts() {
 
     }
 
-    public OrderProducts(Order order, Product product, Long amount) {
+    public OrderProducts(Order order, Product product, Integer amount) {
         this.order = order;
         this.product = product;
         this.amount = amount;
@@ -33,11 +33,11 @@ public class OrderProducts {
         this.product = product;
     }
 
-    public Long getAmount() {
+    public int getAmount() {
         return amount;
     }
 
-    public void setAmount(Long amount) {
+    public void setAmount(int amount) {
         this.amount = amount;
     }
 

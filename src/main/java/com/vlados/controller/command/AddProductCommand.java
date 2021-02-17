@@ -18,12 +18,6 @@ public class AddProductCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {
-        System.out.println("command");
-        Enumeration<String> enumeration = request.getParameterNames();
-        System.out.println(enumeration.hasMoreElements());
-        while (enumeration.hasMoreElements()) {
-            System.out.println(enumeration.nextElement());
-        }
         productService.addProduct(ProductDTO.builder()
                 .name(request.getParameter("name"))
                 .amount(Integer.parseInt(request.getParameter("amount")))

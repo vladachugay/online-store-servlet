@@ -67,21 +67,18 @@
             <td><c:out value="${order.user.email}"/></td>
             <td><c:out value="${order.creationDate}"/></td>
             <td><c:out value="${order.totalPrice}"/></td>
-            <td><c:out value="${order.status}"/></td>
+            <td><fmt:message key="${order.status.name()}"/></td>
             <td>
-                <form
-<%--                        method="post" th:action="@{/orders/changestatus/} + ${order.id}">--%>
-                    <select class="custom-select form-select-sm" name="status" id="status">
-                        <c:forEach var="status" items="${requestScope.statuses}">
-                            <option value="${status.name()}" ${status.name()==order.status ? 'selected' : ''}>
-                                <fmt:message key="${status.name()}"/>
-                            </option>
-                        </c:forEach>
-                    </select>
-                    <button type="submit" class="btn btn-outline-success btn-sm my-2">
-                        <fmt:message key="change_status"/>
-                    </button>
-                </form>
+                <c:if test="${order.status.equals(requestScope.registered)}" >
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <form method="post" action="/admin/orders/paid/<c:out value="${order.id}"/>">
+                            <button type="submit" class="btn btn-outline-success mr-1"><fmt:message key="order.order.set_paid"/></button>
+                        </form>
+                        <form method="post" action="/admin/orders/cancel/<c:out value="${order.id}"/>">
+                            <button type="button" class="btn btn-outline-danger ml-1"><fmt:message key="order.cancel"/></button>
+                        </form>
+                    </div>
+                </c:if>
             </td>
         </tr>
         </c:forEach>

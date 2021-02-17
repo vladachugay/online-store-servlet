@@ -17,7 +17,7 @@ public class Order {
     public enum Status {
         REGISTERED,
         CANCELED,
-        PAYED
+        PAID
     }
 
     public Order(Long id, BigDecimal totalPrice, LocalDateTime creationDate, Status status, User user, Set<OrderProducts> orderProducts) {

@@ -19,14 +19,29 @@ public class JDBCProductDao implements ProductDao {
     }
 
     @Override
-    public void reduceAmountById(long id, int quantity) {
-
+    public boolean reduceAmountById(long id, int quantity) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(ProductQueries.REDUCE_AMOUNT)) {
+            preparedStatement.setInt(1, quantity);
+            preparedStatement.setLong(2, id);
+            return preparedStatement.execute();
+        } catch (SQLException e) {
+            System.err.println("cant reduce amount");
+        }
+        return false;
     }
 
     @Override
-    public void increaseAmountById(long id, int quantity) {
-
+    public boolean increaseAmountById(long id, int quantity) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(ProductQueries.INCREASE_AMOUNT)) {
+            preparedStatement.setInt(1, quantity);
+            preparedStatement.setLong(2, id);
+            return preparedStatement.execute();
+        } catch (SQLException e) {
+            System.err.println("cant increase amount");
+        }
+        return false;
     }
+
 
     @Override
     public boolean create(Product product) {
@@ -50,7 +65,18 @@ public class JDBCProductDao implements ProductDao {
 
     @Override
     public Optional<Product> findById(long id) {
-        return Optional.empty();
+        Product product = null;
+        try (PreparedStatement statement = connection.prepareStatement(ProductQueries.FIND_BY_ID)) {
+            statement.setLong(1, id);
+            ResultSet rs = statement.executeQuery();
+            while (rs.next()) {
+                product = productMapper.extractFromResultSet(rs);
+            }
+        } catch (SQLException e) {
+            System.err.println("cant find product");
+            throw new RuntimeException();
+        }
+        return Optional.ofNullable(product);
     }
 
     @Override
@@ -70,13 +96,37 @@ public class JDBCProductDao implements ProductDao {
     }
 
     @Override
-    public void update(Product entity) {
-
+    public boolean update(Product product) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(ProductQueries.UPDATE)) {
+            System.out.println(product);
+            preparedStatement.setString(1, product.getName());
+            preparedStatement.setBigDecimal(2, product.getPrice());
+            preparedStatement.setString(3, product.getCategory().name());
+            preparedStatement.setString(4, product.getMaterial().name());
+            preparedStatement.setString(5, product.getPicPath());
+            preparedStatement.setString(6, product.getDescription());
+            preparedStatement.setInt(7, product.getAmount());
+            preparedStatement.setLong(8, product.getId());
+            System.out.println(preparedStatement);
+            return preparedStatement.execute();
+        } catch (SQLException e) {
+            //TODO handle exception
+            System.err.println("cant update product");
+        }
+        return false;
     }
 
     @Override
-    public void delete(long id) {
-
+    public boolean delete(long id) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(ProductQueries.DELETE_BY_ID)) {
+            preparedStatement.setLong(1, id);
+            System.out.println(preparedStatement);
+            return preparedStatement.execute();
+        } catch (SQLException ex) {
+            //TODO handle exception
+            System.err.println("cant delete products");
+        }
+        return false;
     }
 
     @Override

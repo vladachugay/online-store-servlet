@@ -8,9 +8,9 @@ public interface ProductDao extends GenericDao<Product>{
 
         List<Product> findAll();
 
-        void reduceAmountById(long id, int quantity);
+        boolean reduceAmountById(long id, int quantity);
 
-        void increaseAmountById(long id, int quantity);
+        boolean increaseAmountById(long id, int quantity);
 
 
 }

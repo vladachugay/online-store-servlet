@@ -103,13 +103,14 @@ public class JDBCUserDao implements UserDao {
     }
 
     @Override
-    public void update(User entity) {
-
+    public boolean update(User entity) {
+        return false;
     }
 
     @Override
-    public void delete(long id) {
+    public boolean delete(long id) {
 
+        return false;
     }
 
     @Override

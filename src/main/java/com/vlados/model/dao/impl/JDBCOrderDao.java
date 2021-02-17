@@ -2,14 +2,14 @@ package com.vlados.model.dao.impl;
 
 import com.vlados.model.dao.OrderDao;
 import com.vlados.model.dao.impl.query.OrderQueries;
+import com.vlados.model.dao.impl.query.ProductQueries;
 import com.vlados.model.dao.mapper.OrderMapper;
 import com.vlados.model.entity.Order;
+import com.vlados.model.entity.OrderProducts;
+import com.vlados.model.entity.Product;
 import com.vlados.model.entity.User;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.*;
 
 public class JDBCOrderDao implements OrderDao {
@@ -55,6 +55,46 @@ public class JDBCOrderDao implements OrderDao {
     }
 
     @Override
+    public long createAndGetNewId(Order order) {
+        try (PreparedStatement statement = connection.prepareStatement(
+                OrderQueries.CREATE, Statement.RETURN_GENERATED_KEYS)) {
+//            "insert into orders (status, total_price, creation_date, user_id) " +
+//                    "values (?, ?, ?, ?)"
+            statement.setString(1, order.getStatus().name());
+            statement.setBigDecimal(2, order.getTotalPrice());
+            statement.setTimestamp(3, Timestamp.valueOf(order.getCreationDate()));
+            statement.setLong(4, order.getUser().getId());
+            statement.execute();
+            ResultSet rs = statement.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+        } catch (SQLException e) {
+            System.err.println("cant add new order");
+            throw new RuntimeException();
+        }
+        throw new RuntimeException();
+    }
+
+    public boolean addProductsToOrder(Order order) throws SQLException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(OrderQueries.ADD_PRODUCT_TO_ORDER)) {
+            connection.setAutoCommit(false);
+            for (OrderProducts op : order.getOrderProducts()) {
+                preparedStatement.setLong(1, op.getOrder().getId());
+                preparedStatement.setLong(2, op.getProduct().getId());
+                preparedStatement.setLong(3, op.getAmount());
+                preparedStatement.execute();
+            }
+            connection.commit();
+            return true;
+        } catch (SQLException ex) {
+            System.err.println("cant add products to order");
+            connection.rollback();
+            return false;
+        }
+    }
+
+    @Override
     public Optional<Order> findById(long id) {
         return Optional.empty();
     }
@@ -65,13 +105,14 @@ public class JDBCOrderDao implements OrderDao {
     }
 
     @Override
-    public void update(Order entity) {
-
+    public boolean update(Order entity) {
+        return false;
     }
 
     @Override
-    public void delete(long id) {
+    public boolean delete(long id) {
 
+        return false;
     }
 
     @Override

@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class ProductDTO {
+    private Long id;
     private String name;
     private String category;
     private String material;
@@ -16,6 +17,14 @@ public class ProductDTO {
 
     public static ProductDTO.ProductDTOBuilder builder() {
         return new ProductDTO.ProductDTOBuilder();
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -96,9 +105,10 @@ public class ProductDTO {
                 '}';
     }
 
-    public ProductDTO(final String name, final String category, final String material,
+    public ProductDTO(final Long id, final String name, final String category, final String material,
                       final String picPath, final LocalDateTime date, final String description,
                       final BigDecimal price, final Integer amount) {
+        this.id = id;
         this.name = name;
         this.category = category;
         this.material = material;
@@ -112,6 +122,7 @@ public class ProductDTO {
     public ProductDTO() {}
 
     public static class ProductDTOBuilder {
+        private Long id;
         private String name;
         private String category;
         private String material;
@@ -124,6 +135,11 @@ public class ProductDTO {
         public ProductDTOBuilder() {
         }
 
+
+        public ProductDTO.ProductDTOBuilder id(final Long id) {
+            this.id = id;
+            return this;
+        }
 
         public ProductDTO.ProductDTOBuilder name(final String name) {
             this.name = name;
@@ -167,7 +183,7 @@ public class ProductDTO {
 
         public ProductDTO build() {
             System.out.println("build");
-            return new ProductDTO(name, category, material, picPath, date, description, price, amount);
+            return new ProductDTO(id, name, category, material, picPath, date, description, price, amount);
         }
     }
 }

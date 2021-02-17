@@ -9,6 +9,8 @@ public abstract class ServiceFactory {
 
     public abstract ProductService createProductService();
 
+    public abstract CartService createCartService();
+
     public static ServiceFactory getInstance() {
         if (serviceFactory == null) {
             synchronized (ServiceFactory.class) {

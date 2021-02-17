@@ -41,6 +41,9 @@ public class MainServlet extends HttpServlet {
         getCommands.put("admin", new GetAdminPanelCommand(serviceFactory.createOrderService()));
         getCommands.put("admin/users", new GetUsersPageCommand(serviceFactory.createUserService()));
         getCommands.put("admin/products/add", new GetAddProductPage());
+        getCommands.put("admin/products/edit/\\d+", new GetEditProductPageCommand(serviceFactory.createProductService()));
+        getCommands.put("admin/cart", new GetAdminCartCommand());
+        getCommands.put("admin/products/\\d+", new GetProductPageCommand(serviceFactory.createProductService()));
     }
 
     private void putPostCommands(ServiceFactory serviceFactory) {
@@ -49,6 +52,11 @@ public class MainServlet extends HttpServlet {
         postCommands.put("admin/users/lock/\\d+", new LockUserCommand(serviceFactory.createUserService()));
         postCommands.put("admin/users/unlock/\\d+", new UnlockUserCommand(serviceFactory.createUserService()));
         postCommands.put("admin/products/add", new AddProductCommand(serviceFactory.createProductService()));
+        postCommands.put("admin/products/edit/\\d+", new EditProductCommand(serviceFactory.createProductService()));
+        postCommands.put("admin/products/delete/\\d+", new DeleteProductCommand(serviceFactory.createProductService()));
+        postCommands.put("admin/cart/add/\\d+", new AddToCartAdminProductsCommands(serviceFactory.createProductService()));
+        postCommands.put("admin/cart/delete/\\d+", new DeleteFromCartAdminCommand(serviceFactory.createProductService()));
+        postCommands.put("admin/orders/create", new CreateOrderAdminCommand(serviceFactory.createOrderService()));
     }
 
     @Override

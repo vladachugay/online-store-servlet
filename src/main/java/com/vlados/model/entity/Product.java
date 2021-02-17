@@ -18,6 +18,7 @@ public class Product {
     private int amount;
 
     public Product(ProductDTO productDTO) {
+        id = productDTO.getId();
         name = productDTO.getName();
         category = Category.valueOf(productDTO.getCategory());
         price = productDTO.getPrice();

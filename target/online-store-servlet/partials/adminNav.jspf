@@ -12,7 +12,7 @@
                 <a class="nav-link" href="/admin"><fmt:message key="admin_panel"/></a>
             </li>
             <li class="nav-item active">
-                <a class="nav-link" href="/cart"><fmt:message key="cart"/></a>
+                <a class="nav-link" href="/admin/cart"><fmt:message key="cart"/></a>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"

@@ -8,6 +8,7 @@ import com.vlados.model.entity.User;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+import java.util.Optional;
 
 public class UserService {
     private final DaoFactory daoFactory;
@@ -49,6 +50,13 @@ public class UserService {
     public List<User> getUsers() {
         try (UserDao userDao = daoFactory.createUserDao()) {
             return userDao.findAll();
+        }
+    }
+
+    public User findByUserName(String username) {
+        try (UserDao userDao = daoFactory.createUserDao()) {
+            return userDao.findByUsername(username).get();
+            //TODO check optional
         }
     }
 

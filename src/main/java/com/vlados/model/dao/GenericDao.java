@@ -11,9 +11,9 @@ public interface GenericDao<T> extends AutoCloseable {
 
     List<T> findAll();
 
-    void update(T entity);
+    boolean update(T entity);
 
-    void delete(long id);
+    boolean delete(long id);
 
     void close();
 }

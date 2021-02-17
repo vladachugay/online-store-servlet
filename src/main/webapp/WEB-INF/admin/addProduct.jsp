@@ -57,8 +57,7 @@
                         <fmt:message key="${cat.name()}"/>
                     </option>
                 </c:forEach>
-            </select>
-        </div>
+            </select>        </div>
 
         <div class="input-group mb-3">
             <div class="input-group-prepend">
