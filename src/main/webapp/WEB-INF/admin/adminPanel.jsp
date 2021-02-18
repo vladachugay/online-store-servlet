@@ -71,11 +71,11 @@
             <td>
                 <c:if test="${order.status.equals(requestScope.registered)}" >
                     <div class="btn-group" role="group" aria-label="Basic example">
-                        <form method="post" action="/admin/orders/paid/<c:out value="${order.id}"/>">
+                        <form method="post" action="/admin/orders/pay/<c:out value="${order.id}"/>">
                             <button type="submit" class="btn btn-outline-success mr-1"><fmt:message key="order.order.set_paid"/></button>
                         </form>
                         <form method="post" action="/admin/orders/cancel/<c:out value="${order.id}"/>">
-                            <button type="button" class="btn btn-outline-danger ml-1"><fmt:message key="order.cancel"/></button>
+                            <button type="submit" class="btn btn-outline-danger ml-1"><fmt:message key="order.cancel"/></button>
                         </form>
                     </div>
                 </c:if>

@@ -7,6 +7,6 @@ import javax.servlet.http.HttpServletRequest;
 public class GetRegistrationPageCommand implements Command {
     @Override
     public String execute(HttpServletRequest request) {
-        return "/registration.jsp";
+        return "/WEB-INF/guest/registration.jsp";
     }
 }

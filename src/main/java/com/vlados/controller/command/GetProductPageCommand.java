@@ -16,6 +16,6 @@ public class GetProductPageCommand implements Command {
     public String execute(HttpServletRequest request) {
         String[] parts = request.getRequestURI().split("/");
         request.setAttribute("product", productService.findById(Long.parseLong(parts[parts.length - 1])));
-        return "/WEB-INF/admin/product.jsp";
+        return "/WEB-INF/"+request.getSession().getAttribute("role").toString().toLowerCase()+"/product.jsp";
     }
 }

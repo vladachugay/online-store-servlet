@@ -11,7 +11,7 @@ public class LogInCommand implements Command {
 
     private static final String USER_REDIRECT = "redirect:/user/products" ;
     private static final String ADMIN_REDIRECT = "redirect:/admin/products";
-    private static final String GUEST_REDIRECT = "redirect:/products";
+    private static final String GUEST_REDIRECT = "redirect:/guest/products";
     private final UserService userService;
 
     public LogInCommand(UserService userService) {

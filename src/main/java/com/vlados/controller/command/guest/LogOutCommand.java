@@ -15,19 +15,12 @@ public class LogOutCommand implements Command {
         HttpSession session = request.getSession();
         ServletContext context = session.getServletContext();
         String username = (String) session.getAttribute("username");
-        CommandUtility.setUserRole(request, "Guest", User.Role.UNKNOWN);
+        CommandUtility.setUserRole(request, "Guest", User.Role.GUEST);
         @SuppressWarnings("unchecked")
         HashSet<String> loggedUsers = (HashSet<String>) context.getAttribute("loggedUsers");
 
-        System.out.println("Before logout");
-        System.out.println(loggedUsers);
-
         loggedUsers.remove(username);
         context.setAttribute("loggedUsers", loggedUsers);
-
-
-        System.out.println("After logout");
-        System.out.println(loggedUsers);
 
         return "redirect:/login";
     }

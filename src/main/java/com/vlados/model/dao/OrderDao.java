@@ -14,7 +14,11 @@ public interface OrderDao extends GenericDao<Order> {
 
     List<Order> findAllWithUsers();
 
+    boolean payOrderById(long id);
+
     boolean addProductsToOrder(Order order) throws SQLException;
 
     long createAndGetNewId(Order order);
+
+    boolean closeOrderById(long id);
 }

@@ -63,4 +63,21 @@ public class OrderService {
     }
 
 
+    public boolean closeOrderById(long id) {
+        try (OrderDao orderDao = daoFactory.createOrderDao()) {
+            return orderDao.closeOrderById(id);
+        }
+    }
+
+    public boolean payOrderById(long id) {
+        try (OrderDao orderDao = daoFactory.createOrderDao()) {
+            return orderDao.payOrderById(id);
+        }
+    }
+
+    public List<Order> getOrdersByUserId(User user) {
+        try (OrderDao orderDao = daoFactory.createOrderDao()) {
+            return orderDao.findByUser(user);
+        }
+    }
 }

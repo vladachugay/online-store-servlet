@@ -46,7 +46,7 @@
     </a>
     <div class="collapse my-3" id="collapseExample">
         <div class="form-group mt-3">
-            <form class="row g-4" method="get" action="/products">
+            <form class="row g-4" method="get" action="/user/products">
                 <div class="col-md-3">
                     <label class="form-label" for="sorting"><fmt:message key="sort_by"/> </label>
                     <select class="custom-select form-select-sm" name="sortcriteria" id="sorting">
@@ -109,19 +109,11 @@
                 <img class="card-img-top" src="${product.picPath}">
                 <div class="card-body">
                     <h5 class="card-title">
-<%--                        <a th:href="@{/products/} + ${product.id}" th:text="${product.name}"></a>--%>
-                        <a href="#"><c:out value="${product.name}"/></a>
+                        <a href="/user/products/<c:out value="${product.id}"/>"></a>
                     </h5>
                     <p class="card-text"><fmt:message key="${product.category}"/> </p>
                     <p class="card-text"><fmt:message key="${product.material}"/></p>
                     <p class="card-text"><c:out value="${product.price}"/></p>
-<%--                    <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/products/edit/} + ${product.id}"--%>
-<%--                       class="btn btn-outline-secondary mr-1"--%>
-<%--                       th:text="#{product.edit}"></a>--%>
-<%--                    <form th:action="@{/products/delete/} + ${product.id}" method="post">--%>
-<%--                        <button sec:authorize="hasRole('ROLE_ADMIN')" type="submit" class="btn btn-outline-danger my-2"--%>
-<%--                                th:text="#{product.delete}"></button>--%>
-<%--                    </form>--%>
                 </div>
             </div>
         </div>

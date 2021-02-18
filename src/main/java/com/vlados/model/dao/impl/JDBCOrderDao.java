@@ -27,7 +27,19 @@ public class JDBCOrderDao implements OrderDao {
 
     @Override
     public List<Order> findByUser(User user) {
-        return null;
+        List<Order> orders = new ArrayList<>();
+        try (PreparedStatement preparedStatement = connection.prepareStatement(OrderQueries.FIND_BY_USER)) {
+            preparedStatement.setLong(1, user.getId());
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                orders.add(orderMapper.extractFromResultSet(rs));
+            }
+        } catch (SQLException ex) {
+            System.err.println("cant get user's orders");
+            //TODO log
+            //TODO handle exception
+        }
+        return orders;
     }
 
     @Override
@@ -74,6 +86,28 @@ public class JDBCOrderDao implements OrderDao {
             throw new RuntimeException();
         }
         throw new RuntimeException();
+    }
+
+    @Override
+    public boolean closeOrderById(long id) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(OrderQueries.CANCEL_ORDER)) {
+            preparedStatement.setLong(1, id);
+            return  preparedStatement.execute();
+        } catch (SQLException e) {
+            System.err.println("Cant cancel product ");
+        }
+        return false;
+    }
+
+    @Override
+    public boolean payOrderById(long id) {
+        try (PreparedStatement preparedStatement = connection.prepareStatement(OrderQueries.PAY_ORDER)) {
+            preparedStatement.setLong(1, id);
+            return  preparedStatement.execute();
+        } catch (SQLException e) {
+            System.err.println("Cant pay product ");
+        }
+        return false;
     }
 
     public boolean addProductsToOrder(Order order) throws SQLException {
@@ -123,6 +157,4 @@ public class JDBCOrderDao implements OrderDao {
             throw new RuntimeException(e);
         }
     }
-
-
 }

@@ -19,10 +19,6 @@
         <%@include file="/css/style.css"%>
         <%@include file="/css/input.css"%>
     </style>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script type="text/javascript">
-        <%@include file="/js/input.js"%>
-    </script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
           crossorigin="anonymous">
@@ -43,7 +39,7 @@
 <body class="d-flex flex-column min-vh-100">
 <%@include file="/partials/adminNav.jspf" %>
 
-<div class="container">
+<div class="container mt-3">
     <div class="row">
         <div class="col">
             Picture will be located here
@@ -70,9 +66,11 @@
     </div>
     <form method="post" action="/admin/cart/add/<c:out value="${requestScope.product.id}"/>">
         <div class="input-group">
-            <input type="button" value="-" class="button-minus" data-field="quantity">
-            <input type="number" step="1" max="" value="1" name="quantity" class="quantity-field">
-            <input type="button" value="+" class="button-plus" data-field="quantity">
+            <input type="button" value="-" class="button-minus" data-field="quantity"
+                   onclick="document.getElementById('product-quantity').value--">
+            <input type="number" id="product-quantity" step="1" value="1" name="quantity" class="quantity-field">
+            <input type="button" value="+" class="button-plus" data-field="quantity"
+                   onclick="document.getElementById('product-quantity').value++">
         </div>
         <button class="btn btn-pink" type="submit"><fmt:message key="product.add_to_cart"/></button>
     </form>

@@ -18,9 +18,4 @@ public class ServiceFactoryImpl extends ServiceFactory {
     public ProductService createProductService() {
         return new ProductService(DaoFactory.getInstance());
     }
-
-    @Override
-    public CartService createCartService() {
-        return  new CartService();
-    }
 }

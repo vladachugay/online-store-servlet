@@ -29,7 +29,7 @@
                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> My account
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="/user/"><fmt:message key="my_account"/></a></li>
+                        <li><a class="dropdown-item" href="/admin/account"><fmt:message key="my_account"/></a></li>
                         <li><a class="dropdown-item" href="/logout"><fmt:message key="logout"/></a></li>
                     </ul>
                 </div>

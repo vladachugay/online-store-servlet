@@ -109,7 +109,6 @@
                 <img class="card-img-top" src="${product.picPath}">
                 <div class="card-body">
                     <h5 class="card-title">
-<%--                        <a th:href="@{/products/} + ${product.id}" th:text="${product.name}"></a>--%>
                         <a href="/admin/products/<c:out value="${product.id}"/>">
                             <c:out value="${product.name}"/>
                         </a>

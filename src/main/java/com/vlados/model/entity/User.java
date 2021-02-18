@@ -30,7 +30,7 @@ public class User {
     public enum Role {
         ADMIN,
         USER,
-        UNKNOWN;
+        GUEST;
 
         public String getAuthority() {
             return this.name();
