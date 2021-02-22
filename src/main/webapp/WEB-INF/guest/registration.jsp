@@ -60,28 +60,28 @@
             <form method="post" action="/registration">
                 <div class="form-group">
                     <label><fmt:message key="fullName"/></label>
-                    <input type="text" name="full_name" id="fullName" class="form-control"
+                    <input type="text" required minlength="4" name="full_name" id="fullName" class="form-control"
                            placeholder=<fmt:message key="fullName"/>>
                 </div>
                 <div class="form-group">
                     <label><fmt:message key="username"/></label>
-                    <input type="text" name="username" id="username" class="form-control"
+                    <input type="text" required name="username" id="username" class="form-control"
                            placeholder=<fmt:message key="username"/>>
                 </div>
                 <div class="form-group">
                     <label><fmt:message key="email"/></label>
-                    <input type="email" name="email" id="email" class="form-control"
+                    <input type="email" required name="email" id="email" class="form-control"
                            placeholder=<fmt:message key="email"/>>
 
                 </div>
                 <div class="form-group">
                     <label><fmt:message key="phoneNumber"/></label>
-                    <input type="tel" name="phone_number" id="phoneNumber" class="form-control"
+                    <input type="tel" required name="phone_number" id="phoneNumber" class="form-control"
                            placeholder=<fmt:message key="phoneNumber"/>>
                 </div>
                 <div class="form-group">
                     <label><fmt:message key="password"/></label>
-                    <input type="password" name="password" id="password" class="form-control" placeholder=<fmt:message key="password"/>>
+                    <input type="password" required minlength="4" name="password" id="password" class="form-control" placeholder=<fmt:message key="password"/>>
                 </div>
                 <button type="submit" class="btn btn-pink"><fmt:message key="registration"/></button>
                 <a href="/login" class="btn btn-pink"><fmt:message key="login"/></a>

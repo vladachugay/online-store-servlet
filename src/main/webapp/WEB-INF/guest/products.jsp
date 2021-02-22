@@ -51,9 +51,7 @@
                     <label class="form-label" for="sorting"><fmt:message key="sort_by"/> </label>
                     <select class="custom-select form-select-sm" name="sortcriteria" id="sorting">
                         <c:forEach var="sort" items="${requestScope.sorting}">
-                            <option value="${sort.name()}"
-<%--                                ${sort.name()==sortcriteria ? 'selected' : ''}--%>
-                            >
+                            <option value="${sort.name()}" ${sort.name()==requestScope.chosen_sortcriteria ? 'selected' : ''}>
                                 <fmt:message key="${sort.name()}"/>
                             </option>
                         </c:forEach>
@@ -64,9 +62,7 @@
                     <select class="custom-select form-select-sm" name="category" id="category">
                         <option value="ALL"><fmt:message key="all"/></option>
                         <c:forEach var="cat" items="${requestScope.categories}">
-                            <option value="${cat.name()}"
-<%--                                ${cat.name()==category ? 'selected' : ''}--%>
-                            >
+                            <option value="${cat.name()}" ${cat.name()==requestScope.chosen_category ? 'selected' : ''}>
                                 <fmt:message key="${cat.name()}"/>
                             </option>
                         </c:forEach>
@@ -77,9 +73,7 @@
                     <select class="custom-select form-select-sm" name="material" id="material">
                         <option value="ALL"><fmt:message key="all"/></option>
                         <c:forEach var="mat" items="${requestScope.materials}">
-                            <option value="${mat.name()}"
-<%--                                ${mat.name()==material ? 'selected' : ''}--%>
-                            >
+                            <option value="${mat.name()}" ${mat.name()==requestScope.chosen_material ? 'selected' : ''}>
                                 <fmt:message key="${mat.name()}"/>
                             </option>
                         </c:forEach>
@@ -89,15 +83,15 @@
                     Price between
                     <div class="form-group input-group-sm">
                         <label for="price_from"><fmt:message key="price_from"/></label>
-                        <input type="text" name="price_from" id="price_from" class="form-control"
-                               value="${requestScope.price_from}">
+                        <input type="number" min="0" max="100000" required name="price_from" id="price_from" class="form-control"
+                               value="${requestScope.chosen_price_from}">
                         <label for="price_to"><fmt:message key="price_to"/></label>
-                        <input type="text" name="price_to" id="price_to" class="form-control"
-                               value="${requestScope.price_to}">
+                        <input type="number" min="1" max="100000" required name="price_to" id="price_to" class="form-control"
+                               value="${requestScope.chosen_price_to}">
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <button class="btn btn-outline-secondary" type="submit"><fmt:message key="apply"/> </button>
+                    <button class="btn btn-outline-secondary" type="submit"><fmt:message key="apply"/></button>
                 </div>
             </form>
         </div>
@@ -121,6 +115,32 @@
         </div>
         </c:forEach>
     </div>
+    <nav>
+        <ul class="pagination d-flex justify-content-center">
+            <li class="page-item <c:out value="${currentPage <= 1 ? 'disabled' : ''}"/>">
+                <a class="page-link"
+                   href="/guest/products?size=${size}&page=${currentPage - 1}&sortcriteria=${chosen_sortcriteria}&material=${chosen_material}&category=${chosen_category}&price_from=${chosen_price_from}&price_to=${requestScope.chosen_price_to}">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <c:if test="${requestScope.pageNumbers.size() > 0}">
+                <c:forEach var="pageNumber" items="${pageNumbers}">
+                    <li class="page-item <c:out value="${currentPage == pageNumber ? 'active' : ''}"/>">
+                        <a class="page-link"
+                           href="/guest/products?size=${size}&page=${pageNumber}&sortcriteria=${chosen_sortcriteria}&material=${chosen_material}&category=${chosen_category}&price_from=${chosen_price_from}&price_to=${chosen_price_to}">
+                            <c:out value="${pageNumber}"/>
+                        </a>
+                    </li>
+                </c:forEach>
+            </c:if>
+            <li class="page-item <c:out value="${currentPage >= products.size() ? 'disabled' : ''}"/>">
+                <a class="page-link"
+                   href="/guest/products?size=${size}&page=${currentPage + 1}&sortcriteria=${chosen_sortcriteria}&material=${chosen_material}&category=${chosen_category}&price_from=${chosen_price_from}&price_to=${chosen_price_to}">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </div>
 <%@include file="/partials/footer.jspf" %>
 </body>

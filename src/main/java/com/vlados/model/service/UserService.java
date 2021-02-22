@@ -23,11 +23,15 @@ public class UserService {
         try (UserDao userDao = daoFactory.createUserDao()) {
             //TODO use password encoder
             User user = userDao.findByUsername(username).get();
-            System.out.println(user);
             //TODO: orElseThrow() - throw exception.
             if (!user.getPassword().equals(passwordEncoder.encode(password))) {
                 //TODO throw exception;
+
                 System.err.println("wrong password");
+            }
+            if (user.isLocked()) {
+                //TODO throw exception
+                System.err.println("user is locked");
             }
             return user.getRole();
         }

@@ -62,11 +62,11 @@
             <form method="post" action="/login">
                 <div class="form-group">
                     <label><fmt:message key="username"/></label>
-                    <input type="text" class="form-control" placeholder=<fmt:message key="username"/> id="username" name="username" >
+                    <input type="text" required class="form-control" placeholder=<fmt:message key="username"/> id="username" name="username" >
                 </div>
                 <div class="form-group">
                     <label><fmt:message key="password"/></label>
-                    <input type="password" class="form-control" id="password" name="password" placeholder=<fmt:message key="password"/>>
+                    <input type="password" required class="form-control" id="password" name="password" placeholder=<fmt:message key="password"/>>
                 </div>
                 <button type="submit" class="btn btn-pink"><fmt:message key="login"/></button>
                 <a href="/registration" class="btn btn-pink"><fmt:message key="registration"/></a>

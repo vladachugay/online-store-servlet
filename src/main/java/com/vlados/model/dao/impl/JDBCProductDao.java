@@ -4,7 +4,11 @@ import com.vlados.model.dao.ProductDao;
 import com.vlados.model.dao.impl.query.ProductQueries;
 import com.vlados.model.dao.mapper.ProductMapper;
 import com.vlados.model.entity.Product;
+import com.vlados.model.entity.SortCriteria;
+import com.vlados.model.util.Page;
+import com.vlados.model.util.Pageable;
 
+import java.math.BigDecimal;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -96,6 +100,32 @@ public class JDBCProductDao implements ProductDao {
     }
 
     @Override
+    public Page<Product> findFiltered(Pageable pageable, String sortCriteria, String category,
+                                      String material, BigDecimal priceFrom, BigDecimal priceTo) {
+        List<Product> products = new ArrayList<>();
+        String query = generateQuery(SortCriteria.valueOf(sortCriteria), category, material, priceFrom, priceTo);
+        System.out.println(query);
+        try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                products.add(productMapper.extractFromResultSet(rs));
+            }
+        } catch (SQLException ex) {
+            //TODO log
+            //TODO handle exception
+            System.err.println("cant find filtered products");
+            System.err.println(ex.getMessage());
+        }
+
+        int firstProductInPageIndex = pageable.getSizeOfPage() * pageable.getCurrentPage();
+        int lastProductInPageIndex = Math.min(products.size(), firstProductInPageIndex + pageable.getSizeOfPage());
+
+        List<Product> productsForPage = products.subList(firstProductInPageIndex, lastProductInPageIndex);
+        return new Page<>((int) Math.ceil((double) products.size() / pageable.getSizeOfPage()), productsForPage);
+
+    }
+
+    @Override
     public boolean update(Product product) {
         try (PreparedStatement preparedStatement = connection.prepareStatement(ProductQueries.UPDATE)) {
             System.out.println(product);
@@ -136,5 +166,58 @@ public class JDBCProductDao implements ProductDao {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    private String generateQuery(SortCriteria sortCriteria, String category,
+                                 String material, BigDecimal priceFrom, BigDecimal priceTo) {
+        StringBuilder query = new StringBuilder(ProductQueries.FIND_ALL)
+                .append(ProductQueries.WHERE)
+                .append(ProductQueries.PRICE_BETWEEN)
+                .append(priceFrom)
+                .append(ProductQueries.AND)
+                .append(priceTo);
+
+        if (!"ALL".equals(category) && !"ALL".equals(material)) {
+            query.append(ProductQueries.AND)
+                    .append(ProductQueries.CATEGORY_EQUALS)
+                    .append(ProductQueries.QUOTE)
+                    .append(category)
+                    .append(ProductQueries.QUOTE)
+                    .append(ProductQueries.AND)
+                    .append(ProductQueries.MATERIAL_EQUALS)
+                    .append(ProductQueries.QUOTE)
+                    .append(material)
+                    .append(ProductQueries.QUOTE);
+        } else if ("ALL".equals(material) && !"ALL".equals(category)) {
+            query.append(ProductQueries.AND)
+                    .append(ProductQueries.CATEGORY_EQUALS)
+                    .append(ProductQueries.QUOTE)
+                    .append(category)
+                    .append(ProductQueries.QUOTE);
+        } else if (!"ALL".equals(material)) {
+            query.append(ProductQueries.AND)
+                    .append(ProductQueries.MATERIAL_EQUALS)
+                    .append(ProductQueries.QUOTE)
+                    .append(material)
+                    .append(ProductQueries.QUOTE);
+        }
+
+        switch (sortCriteria) {
+            case PRICE_LOW_TO_HIGH:
+                query.append(ProductQueries.ORDER_BY_PRICE_ASC);
+                break;
+            case PRICE_HIGH_TO_LOW:
+                query.append(ProductQueries.ORDER_BY_PRICE_DESC);
+                break;
+            case NEW_IN:
+                query.append(ProductQueries.ORDER_BY_NEW_IN);
+                break;
+            case BY_NAME_DESC:
+                query.append(ProductQueries.ORDER_BY_NAME_DESC);
+                break;
+            default:
+                query.append(ProductQueries.ORDER_BY_NAME_ASC);
+        }
+        return query.toString();
     }
 }

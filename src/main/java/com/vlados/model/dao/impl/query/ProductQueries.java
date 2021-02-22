@@ -20,4 +20,22 @@ public class ProductQueries {
 
     public static final String INCREASE_AMOUNT = "update products set amount = amount + ? where product_id = ?";
     public static final String REDUCE_AMOUNT = "update products set amount = amount - ? where product_id = ?";
+
+    /////////////////
+    //   Partials
+    /////////////////
+
+    public static final String ORDER_BY_NEW_IN = " order by date ";
+    public static final String ORDER_BY_NAME_ASC = " order by name ";
+    public static final String ORDER_BY_NAME_DESC = " order by name desc ";
+    public static final String ORDER_BY_PRICE_DESC = " order by price desc ";
+    public static final String ORDER_BY_PRICE_ASC = " order by price  ";
+
+    public static final String WHERE = " where ";
+    public static final String AND = " and ";
+    public static final String QUOTE = "'";
+
+    public static final String CATEGORY_EQUALS = " category = ";
+    public static final String MATERIAL_EQUALS = " material = ";
+    public static final String PRICE_BETWEEN = " price between ";
 }

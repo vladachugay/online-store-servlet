@@ -4,7 +4,11 @@ import com.vlados.model.dao.DaoFactory;
 import com.vlados.model.dao.ProductDao;
 import com.vlados.model.dto.ProductDTO;
 import com.vlados.model.entity.Product;
+import com.vlados.model.entity.SortCriteria;
+import com.vlados.model.util.Page;
+import com.vlados.model.util.Pageable;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,9 +20,10 @@ public class ProductService {
         this.daoFactory = daoFactory;
     }
 
-    public List<Product> getProducts() {
+    public Page<Product> getFilteredProducts(Pageable pageable, String sortCriteria, String category,
+                                             String material, BigDecimal priceFrom, BigDecimal priceTo) {
         try (ProductDao productDao = daoFactory.createProductDao()) {
-            return productDao.findAll();
+            return productDao.findFiltered(pageable, sortCriteria, category, material, priceFrom, priceTo);
         }
     }
 

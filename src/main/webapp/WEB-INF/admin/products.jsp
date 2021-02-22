@@ -14,7 +14,7 @@
 <fmt:setBundle basename="lang"/>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <style>
         <%@include file="/css/style.css"%>
     </style>
@@ -46,14 +46,12 @@
     </a>
     <div class="collapse my-3" id="collapseExample">
         <div class="form-group mt-3">
-            <form class="row g-4" method="get" action="/products">
+            <form class="row g-4" method="get" action="/admin/products">
                 <div class="col-md-3">
                     <label class="form-label" for="sorting"><fmt:message key="sort_by"/> </label>
                     <select class="custom-select form-select-sm" name="sortcriteria" id="sorting">
                         <c:forEach var="sort" items="${requestScope.sorting}">
-                            <option value="${sort.name()}"
-<%--                                ${sort.name()==sortcriteria ? 'selected' : ''}--%>
-                            >
+                            <option value="${sort.name()}" ${sort.name()==requestScope.chosen_sortcriteria ? 'selected' : ''}>
                                 <fmt:message key="${sort.name()}"/>
                             </option>
                         </c:forEach>
@@ -64,9 +62,7 @@
                     <select class="custom-select form-select-sm" name="category" id="category">
                         <option value="ALL"><fmt:message key="all"/></option>
                         <c:forEach var="cat" items="${requestScope.categories}">
-                            <option value="${cat.name()}"
-<%--                                ${cat.name()==category ? 'selected' : ''}--%>
-                            >
+                            <option value="${cat.name()}" ${cat.name()==requestScope.chosen_category ? 'selected' : ''}>
                                 <fmt:message key="${cat.name()}"/>
                             </option>
                         </c:forEach>
@@ -77,9 +73,7 @@
                     <select class="custom-select form-select-sm" name="material" id="material">
                         <option value="ALL"><fmt:message key="all"/></option>
                         <c:forEach var="mat" items="${requestScope.materials}">
-                            <option value="${mat.name()}"
-<%--                                ${mat.name()==material ? 'selected' : ''}--%>
-                            >
+                            <option value="${mat.name()}" ${mat.name()==requestScope.chosen_material ? 'selected' : ''}>
                                 <fmt:message key="${mat.name()}"/>
                             </option>
                         </c:forEach>
@@ -89,44 +83,72 @@
                     Price between
                     <div class="form-group input-group-sm">
                         <label for="price_from"><fmt:message key="price_from"/></label>
-                        <input type="text" name="price_from" id="price_from" class="form-control"
-                               value="${requestScope.price_from}">
+                        <input type="number" min="0" max="100000" required name="price_from" id="price_from" class="form-control"
+                               value="${requestScope.chosen_price_from}">
                         <label for="price_to"><fmt:message key="price_to"/></label>
-                        <input type="text" name="price_to" id="price_to" class="form-control"
-                               value="${requestScope.price_to}">
+                        <input type="number" min="1" max="100000" required name="price_to" id="price_to" class="form-control"
+                               value="${requestScope.chosen_price_to}">
                     </div>
                 </div>
                 <div class="col-md-2">
-                    <button class="btn btn-outline-secondary" type="submit"><fmt:message key="apply"/> </button>
+                    <button class="btn btn-outline-secondary" type="submit"><fmt:message key="apply"/></button>
                 </div>
             </form>
         </div>
     </div>
     <div class="row">
         <c:forEach var="product" items="${requestScope.products}">
-        <div class="col-md-4 my-3">
-            <div class="card">
-                <img class="card-img-top" src="${product.picPath}">
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <a href="/admin/products/<c:out value="${product.id}"/>">
-                            <c:out value="${product.name}"/>
+            <div class="col-md-4 my-3">
+                <div class="card">
+                    <img class="card-img-top" src="${product.picPath}">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <a href="/admin/products/<c:out value="${product.id}"/>">
+                                <c:out value="${product.name}"/>
+                            </a>
+                        </h5>
+                        <p class="card-text"><fmt:message key="${product.category}"/></p>
+                        <p class="card-text"><fmt:message key="${product.material}"/></p>
+                        <p class="card-text"><c:out value="${product.price}"/></p>
+                        <a href="/admin/products/edit/<c:out value="${product.id}"/>"
+                           class="btn btn-outline-secondary mr-1">
+                            <fmt:message key="product.edit"/>
                         </a>
-                    </h5>
-                    <p class="card-text"><fmt:message key="${product.category}"/> </p>
-                    <p class="card-text"><fmt:message key="${product.material}"/></p>
-                    <p class="card-text"><c:out value="${product.price}"/></p>
-                    <a href="/admin/products/edit/<c:out value="${product.id}"/>" class="btn btn-outline-secondary mr-1">
-                        <fmt:message key="product.edit"/>
-                    </a>
-                    <form action="/admin/products/delete/<c:out value="${product.id}"/>" method="post">
-                        <button type="submit" class="btn btn-outline-danger my-2"><fmt:message key="product.delete"/></button>
-                    </form>
+                        <form action="/admin/products/delete/<c:out value="${product.id}"/>" method="post">
+                            <button type="submit" class="btn btn-outline-danger my-2"><fmt:message
+                                    key="product.delete"/></button>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
         </c:forEach>
     </div>
+    <nav>
+        <ul class="pagination d-flex justify-content-center">
+            <li class="page-item <c:out value="${currentPage <= 1 ? 'disabled' : ''}"/>">
+                <a class="page-link"
+                   href="/admin/products?size=${size}&page=${currentPage - 1}&sortcriteria=${chosen_sortcriteria}&material=${chosen_material}&category=${chosen_category}&price_from=${chosen_price_from}&price_to=${requestScope.chosen_price_to}">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <c:if test="${requestScope.pageNumbers.size() > 0}">
+                <c:forEach var="pageNumber" items="${pageNumbers}">
+                    <li class="page-item <c:out value="${currentPage == pageNumber ? 'active' : ''}"/>">
+                        <a class="page-link"
+                           href="/admin/products?size=${size}&page=${pageNumber}&sortcriteria=${chosen_sortcriteria}&material=${chosen_material}&category=${chosen_category}&price_from=${chosen_price_from}&price_to=${chosen_price_to}">
+                            <c:out value="${pageNumber}"/>
+                        </a>
+                    </li>
+                </c:forEach>
+            </c:if>
+            <li class="page-item <c:out value="${currentPage >= products.size() ? 'disabled' : ''}"/>">
+                <a class="page-link"
+                   href="/admin/products?size=${size}&page=${currentPage + 1}&sortcriteria=${chosen_sortcriteria}&material=${chosen_material}&category=${chosen_category}&price_from=${chosen_price_from}&price_to=${chosen_price_to}">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </div>
 <%@include file="/partials/footer.jspf" %>
 </body>
