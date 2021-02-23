@@ -2,6 +2,7 @@ package com.vlados.controller.command.guest;
 
 import com.vlados.controller.command.Command;
 import com.vlados.controller.command.CommandUtility;
+import com.vlados.model.entity.Cart;
 import com.vlados.model.entity.User;
 
 import javax.servlet.ServletContext;

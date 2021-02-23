@@ -60,29 +60,49 @@
             <form method="post" action="/registration">
                 <div class="form-group">
                     <label><fmt:message key="fullName"/></label>
-                    <input type="text" name="full_name" id="fullName" class="form-control"
+                    <input type="text" required name="full_name" id="fullName" class="form-control"
                            placeholder=<fmt:message key="fullName"/>>
+                    <c:if  test="${requestScope.errors.containsKey('full_name')}">
+                        <div style="color:red"><fmt:message key="${requestScope.errors.get('full_name')}"/></div>
+                    </c:if>
                 </div>
                 <div class="form-group">
                     <label><fmt:message key="username"/></label>
-                    <input type="text" name="username" id="username" class="form-control"
+                    <input type="text" required name="username" id="username" class="form-control"
                            placeholder=<fmt:message key="username"/>>
+                    <c:if  test="${requestScope.errors.containsKey('username')}">
+                        <div style="color:red"><fmt:message key="${requestScope.errors.get('username')}"/></div>
+                    </c:if>
                 </div>
                 <div class="form-group">
                     <label><fmt:message key="email"/></label>
-                    <input type="email" name="email" id="email" class="form-control"
+                    <input type="text" required id="email" class="form-control" name="email"
                            placeholder=<fmt:message key="email"/>>
-
+                    <c:if  test="${requestScope.errors.containsKey('email')}">
+                        <div style="color:red"><fmt:message key="${requestScope.errors.get('email')}"/></div>
+                    </c:if>
                 </div>
                 <div class="form-group">
                     <label><fmt:message key="phoneNumber"/></label>
-                    <input type="tel" name="phone_number" id="phoneNumber" class="form-control"
+                    <input type="tel" required name="phone_number" id="phoneNumber" class="form-control"
                            placeholder=<fmt:message key="phoneNumber"/>>
+                    <c:if  test="${requestScope.errors.containsKey('phone_number')}">
+                        <div style="color:red"><fmt:message key="${requestScope.errors.get('phone_number')}"/></div>
+                    </c:if>
                 </div>
                 <div class="form-group">
                     <label><fmt:message key="password"/></label>
-                    <input type="password" name="password" id="password" class="form-control" placeholder=<fmt:message key="password"/>>
+                    <input type="password" required name="password" id="password" class="form-control"
+                           placeholder=<fmt:message key="password"/>>
+                    <c:if  test="${requestScope.errors.containsKey('password')}">
+                        <div style="color:red"><fmt:message key="${requestScope.errors.get('password')}"/></div>
+                    </c:if>
                 </div>
+                <c:if test="${requestScope.duplicate_error!=null}">
+                    <div class="alert alert-danger" role="alert">
+                        <fmt:message key="${requestScope.duplicate_error}"/>
+                    </div>
+                </c:if>
                 <button type="submit" class="btn btn-pink"><fmt:message key="registration"/></button>
                 <a href="/login" class="btn btn-pink"><fmt:message key="login"/></a>
             </form>

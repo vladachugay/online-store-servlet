@@ -41,7 +41,6 @@ public class ProductService {
     }
 
     public boolean editProduct(ProductDTO productDTO) {
-        System.out.println();
         try (ProductDao productDao = daoFactory.createProductDao()) {
             return productDao.update(new Product(productDTO));
         }

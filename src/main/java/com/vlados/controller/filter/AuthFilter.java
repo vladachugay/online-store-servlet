@@ -63,8 +63,6 @@ public class AuthFilter implements Filter {
         return uri.startsWith(USER) || uri.equals(LOGOUT_DOMAIN);
     }
 
-
-    //TODO add URIs to user access
     private boolean checkGuestAccess(String uri) {
         return uri.matches(GUEST_DOMAIN) || uri.startsWith(GUEST) ;
     }

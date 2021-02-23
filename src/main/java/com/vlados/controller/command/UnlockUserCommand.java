@@ -14,7 +14,7 @@ public class UnlockUserCommand implements Command {
     @Override
     public String execute(HttpServletRequest request) {
         String[] parts = request.getRequestURI().split("/");
-        userService.lockUser(Long.parseLong(parts[parts.length - 1]));
+        userService.unlockUser(Long.parseLong(parts[parts.length - 1]));
         return "redirect:/admin/users";
     }
 }

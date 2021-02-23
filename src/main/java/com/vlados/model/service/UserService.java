@@ -5,6 +5,12 @@ import com.vlados.model.dao.DaoFactory;
 import com.vlados.model.dao.UserDao;
 import com.vlados.model.dto.UserDTO;
 import com.vlados.model.entity.User;
+import com.vlados.model.exception.StoreException;
+import com.vlados.model.exception.store_exc.LoginException;
+import com.vlados.model.exception.store_exc.login_exc.UserDoesntExist;
+import com.vlados.model.exception.store_exc.login_exc.UserIsLockedException;
+import com.vlados.model.exception.store_exc.login_exc.WrongPasswordException;
+import com.vlados.model.util.ExceptionKeys;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -21,17 +27,19 @@ public class UserService {
 
     public User.Role checkUserAndGetRole(String username, String password) {
         try (UserDao userDao = daoFactory.createUserDao()) {
-            //TODO use password encoder
-            User user = userDao.findByUsername(username).get();
-            //TODO: orElseThrow() - throw exception.
+            User user = userDao.findByUsername(username).orElseThrow(()-> {
+                //TODO log
+                throw new UserDoesntExist(ExceptionKeys.USER_DOESNT_EXIST);
+            });
             if (!user.getPassword().equals(passwordEncoder.encode(password))) {
-                //TODO throw exception;
-
+                //TODO log
                 System.err.println("wrong password");
+                throw new WrongPasswordException(ExceptionKeys.WRONG_PASSWORD);
             }
             if (user.isLocked()) {
-                //TODO throw exception
+                //TODO log
                 System.err.println("user is locked");
+                throw new UserIsLockedException(ExceptionKeys.USER_LOCKED);
             }
             return user.getRole();
         }
@@ -44,11 +52,7 @@ public class UserService {
 
         try (UserDao userDao = daoFactory.createUserDao()) {
             userDao.create(new User(userDTO));
-        } catch (Exception e) {
-            //TODO throw exception
-            //TODO log
         }
-
     }
 
     public List<User> getUsers() {
@@ -69,15 +73,17 @@ public class UserService {
             return userDao.lockUserById(id);
         } catch (Exception e) {
             System.err.println("Cant lock user");
+            //TODO handle exception
         }
         return false;
     }
 
     public boolean unlockUser(Long id) {
         try (UserDao userDao = daoFactory.createUserDao()) {
-            return userDao.lockUserById(id);
+            return userDao.unlockUserById(id);
         } catch (Exception e) {
             System.err.println("Cant lock user");
+            //TODO handle exception
         }
         return false;
     }

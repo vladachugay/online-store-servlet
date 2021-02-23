@@ -103,7 +103,9 @@
                 <img class="card-img-top" src="${product.picPath}">
                 <div class="card-body">
                     <h5 class="card-title">
-                        <a href="/user/products/<c:out value="${product.id}"/>"></a>
+                        <a href="/user/products/<c:out value="${product.id}"/>"><
+                            c:out value="${product.name}"/>
+                        </a>
                     </h5>
                     <p class="card-text"><fmt:message key="${product.category}"/> </p>
                     <p class="card-text"><fmt:message key="${product.material}"/></p>

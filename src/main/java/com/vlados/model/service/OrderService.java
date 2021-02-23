@@ -1,16 +1,12 @@
 package com.vlados.model.service;
 
-import com.sun.org.apache.xpath.internal.operations.Or;
 import com.vlados.model.dao.DaoFactory;
 import com.vlados.model.dao.OrderDao;
-import com.vlados.model.dao.ProductDao;
 import com.vlados.model.entity.*;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class OrderService {
 

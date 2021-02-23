@@ -1,6 +1,8 @@
 package com.vlados.controller.command;
 
 import com.vlados.model.entity.User;
+import com.vlados.model.exception.store_exc.login_exc.UserIsLockedException;
+import com.vlados.model.util.ExceptionKeys;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -22,6 +24,7 @@ public class CommandUtility {
 
         if (loggedUsers.stream().anyMatch(username::equals)) {
             return true;
+//            throw  new UserIsLockedException(ExceptionKeys.USER_LOGGED);
         }
         loggedUsers.add(username);
         request.getSession().getServletContext().setAttribute("loggedUsers", loggedUsers);

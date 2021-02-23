@@ -4,6 +4,8 @@ import com.vlados.model.dao.UserDao;
 import com.vlados.model.dao.impl.query.UserQueries;
 import com.vlados.model.dao.mapper.UserMapper;
 import com.vlados.model.entity.User;
+import com.vlados.model.exception.store_exc.DuplicateUsernameException;
+import com.vlados.model.util.ExceptionKeys;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -74,11 +76,10 @@ public class JDBCUserDao implements UserDao {
             preparedStatement.setBoolean(7, user.isLocked());
             return preparedStatement.execute();
         } catch (SQLException e) {
-            //TODO throw exception
             //TODO log
             System.err.println("Cant add new user");
+            throw new DuplicateUsernameException(ExceptionKeys.DUPLICATE_USERNAME);
         }
-        return false;
     }
 
     @Override
