@@ -34,7 +34,6 @@ public class JDBCUserDao implements UserDao {
             System.err.println("cant find user");
             throw new RuntimeException();
         }
-        System.out.println(user);
         return Optional.ofNullable(user);
     }
 
@@ -78,7 +77,7 @@ public class JDBCUserDao implements UserDao {
         } catch (SQLException e) {
             //TODO log
             System.err.println("Cant add new user");
-            throw new DuplicateUsernameException(ExceptionKeys.DUPLICATE_USERNAME);
+            throw  new RuntimeException();
         }
     }
 

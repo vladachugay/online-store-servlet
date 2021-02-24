@@ -20,11 +20,11 @@ public class Product {
     public Product(ProductDTO productDTO) {
         id = productDTO.getId();
         name = productDTO.getName();
-        category = Category.valueOf(productDTO.getCategory());
+        category = productDTO.getCategory();
         price = productDTO.getPrice();
         amount = productDTO.getAmount();
         picPath = productDTO.getPicPath();
-        material = Material.valueOf(productDTO.getMaterial());
+        material = productDTO.getMaterial();
         description = productDTO.getDescription();
         date = productDTO.getDate();
     }

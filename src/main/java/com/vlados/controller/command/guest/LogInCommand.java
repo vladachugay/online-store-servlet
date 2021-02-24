@@ -29,12 +29,14 @@ public class LogInCommand implements Command {
         try {
             role = userService.checkUserAndGetRole(username, pass);
         } catch (StoreException e) {
+            request.setAttribute("username", username);
             request.setAttribute("error_message", e.getMessage());
             return ERROR;
         }
 
         if (CommandUtility.checkUserIsLogged(request, username)) {
             System.err.println("user has already logged in");
+            request.setAttribute("username", username);
             request.setAttribute("error_message", ExceptionKeys.USER_LOGGED);
             return ERROR;
         }

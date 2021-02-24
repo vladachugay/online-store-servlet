@@ -61,10 +61,10 @@ public class JDBCProductDao implements ProductDao {
             System.out.println("dao statement: " + preparedStatement);
             return preparedStatement.execute();
         } catch (SQLException e) {
-            //TODO handle exception
+            //TODO log
             System.err.println("cant add new product");
+            throw  new RuntimeException();
         }
-        return false;
     }
 
     @Override
@@ -113,7 +113,6 @@ public class JDBCProductDao implements ProductDao {
         } catch (SQLException ex) {
             //TODO log
             //TODO handle exception
-            System.err.println("cant find filtered products");
             System.err.println(ex.getMessage());
         }
 
@@ -140,10 +139,9 @@ public class JDBCProductDao implements ProductDao {
             System.out.println(preparedStatement);
             return preparedStatement.execute();
         } catch (SQLException e) {
-            //TODO handle exception
-            System.err.println("cant update product");
+            //TODO log
+            throw new RuntimeException();
         }
-        return false;
     }
 
     @Override
@@ -153,10 +151,9 @@ public class JDBCProductDao implements ProductDao {
             System.out.println(preparedStatement);
             return preparedStatement.execute();
         } catch (SQLException ex) {
-            //TODO handle exception
-            System.err.println("cant delete products");
+            //TODO log
+            throw new RuntimeException();
         }
-        return false;
     }
 
     @Override

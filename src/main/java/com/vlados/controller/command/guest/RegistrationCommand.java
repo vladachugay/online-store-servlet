@@ -32,7 +32,6 @@ public class RegistrationCommand implements Command {
 
         Map<String, String> errors = Validator.validateUser(userDTO);
 
-        //TODO add constants for redirect/error
         if (errors.size() > 0) {
             request.setAttribute("errors", errors);
             return ERROR;

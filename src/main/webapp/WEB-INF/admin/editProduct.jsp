@@ -44,9 +44,12 @@
     <form method="post" action="/admin/products/edit/<c:out value="${requestScope.product.id}"/>">
         <div class="form-group">
             <label><fmt:message key="product.name"/> </label>
-            <input type="text" name="name" id="name" class="form-control"
+            <input required type="text" name="name" id="name" class="form-control"
                    placeholder="<fmt:message key="product.name"/>"
                    value="<c:out value="${requestScope.product.name}"/>">
+            <c:if  test="${requestScope.errors.containsKey('name')}">
+                <div style="color:red"><fmt:message key="${requestScope.errors.get('name')}"/></div>
+            </c:if>
         </div>
 
         <div class="input-group mb-3">
@@ -60,6 +63,9 @@
                     </option>
                 </c:forEach>
             </select>
+            <c:if  test="${requestScope.errors.containsKey('category')}">
+                <div style="color:red"><fmt:message key="${requestScope.errors.get('category')}"/></div>
+            </c:if>
         </div>
 
         <div class="input-group mb-3">
@@ -73,6 +79,9 @@
                     </option>
                 </c:forEach>
             </select>
+            <c:if  test="${requestScope.errors.containsKey('material')}">
+                <div style="color:red"><fmt:message key="${requestScope.errors.get('material')}"/></div>
+            </c:if>
         </div>
 
         <div class="custom-file">
@@ -89,19 +98,31 @@
 
         <div class="form-group">
             <label><fmt:message key="product.price"/></label>
-            <input type="text" name="price" id="price" class="form-control"
+            <input required type="number" step="0.01" name="price" id="price" class="form-control"
                    placeholder="<fmt:message key="product.price"/>"
                     value="<c:out value="${requestScope.product.price}"/>">
+            <c:if  test="${requestScope.errors.containsKey('price')}">
+                <div style="color:red"><fmt:message key="${requestScope.errors.get('price')}"/></div>
+            </c:if>
         </div>
 
         <div class="form-group">
             <label><fmt:message key="product.amount"/></label>
-            <input type="number" name="amount" id="amount" class="form-control"
+            <input required type="number" step="1" name="amount" id="amount" class="form-control"
                    placeholder="<fmt:message key="product.amount"/>"
                    value="<c:out value="${requestScope.product.amount}"/>">
+            <c:if  test="${requestScope.errors.containsKey('amount')}">
+                <div style="color:red"><fmt:message key="${requestScope.errors.get('amount')}"/></div>
+            </c:if>
         </div>
-
-        <button type="submit" class="btn btn-pink"><fmt:message key="product.edit"/></button>
+        <c:if test="${requestScope.error_message!=null}">
+            <div class="alert alert-danger" role="alert">
+                <fmt:message key="${requestScope.error_message}"/>
+            </div>
+        </c:if>
+        <div align="center">
+            <button type="submit" class="btn btn-pink"><fmt:message key="product.edit"/></button>
+        </div>
     </form>
 </div>
 

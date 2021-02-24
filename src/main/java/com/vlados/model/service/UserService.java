@@ -6,6 +6,7 @@ import com.vlados.model.dao.UserDao;
 import com.vlados.model.dto.UserDTO;
 import com.vlados.model.entity.User;
 import com.vlados.model.exception.StoreException;
+import com.vlados.model.exception.store_exc.DuplicateUsernameException;
 import com.vlados.model.exception.store_exc.LoginException;
 import com.vlados.model.exception.store_exc.login_exc.UserDoesntExist;
 import com.vlados.model.exception.store_exc.login_exc.UserIsLockedException;
@@ -52,6 +53,9 @@ public class UserService {
 
         try (UserDao userDao = daoFactory.createUserDao()) {
             userDao.create(new User(userDTO));
+        } catch (Exception e) {
+            //TODO log
+            throw new DuplicateUsernameException(ExceptionKeys.DUPLICATE_USERNAME);
         }
     }
 

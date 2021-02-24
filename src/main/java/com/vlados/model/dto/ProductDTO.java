@@ -1,13 +1,15 @@
 package com.vlados.model.dto;
 
+import com.vlados.model.entity.Product;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 public class ProductDTO {
     private Long id;
     private String name;
-    private String category;
-    private String material;
+    private Product.Category category;
+    private Product.Material material;
     private String picPath;
     private LocalDateTime date;
     private String description;
@@ -35,20 +37,24 @@ public class ProductDTO {
         this.name = name;
     }
 
-    public String getCategory() {
-        return category;
-    }
-
-    public void setCategory(String category) {
-        this.category = category;
-    }
-
-    public String getMaterial() {
+    public Product.Material getMaterial() {
         return material;
     }
 
-    public void setMaterial(String material) {
+    public void setMaterial(Product.Material material) {
         this.material = material;
+    }
+
+    public Product.Category getCategory() {
+        return category;
+    }
+
+    public void setCategory(Product.Category category) {
+        this.category = category;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
     }
 
     public String getPicPath() {
@@ -83,12 +89,8 @@ public class ProductDTO {
         this.price = price;
     }
 
-    public Integer getAmount() {
+    public int getAmount() {
         return amount;
-    }
-
-    public void setAmount(Integer amount) {
-        this.amount = amount;
     }
 
     @Override
@@ -105,7 +107,7 @@ public class ProductDTO {
                 '}';
     }
 
-    public ProductDTO(final Long id, final String name, final String category, final String material,
+    public ProductDTO(final Long id, final String name, final Product.Category category, final Product.Material material,
                       final String picPath, final LocalDateTime date, final String description,
                       final BigDecimal price, final Integer amount) {
         this.id = id;
@@ -124,8 +126,8 @@ public class ProductDTO {
     public static class ProductDTOBuilder {
         private Long id;
         private String name;
-        private String category;
-        private String material;
+        private Product.Category category;
+        private Product.Material material;
         private String picPath;
         private LocalDateTime date;
         private String description;
@@ -146,15 +148,17 @@ public class ProductDTO {
             return this;
         }
 
-        public ProductDTO.ProductDTOBuilder category(final String category) {
+        public ProductDTO.ProductDTOBuilder category(final Product.Category category) {
             this.category = category;
             return this;
         }
 
-        public ProductDTO.ProductDTOBuilder material(final String material) {
+        public ProductDTO.ProductDTOBuilder material(final Product.Material material) {
             this.material = material;
             return this;
         }
+
+
 
         public ProductDTO.ProductDTOBuilder picPath(final String picPath) {
             this.picPath = picPath;

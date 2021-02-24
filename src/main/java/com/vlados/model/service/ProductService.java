@@ -5,6 +5,10 @@ import com.vlados.model.dao.ProductDao;
 import com.vlados.model.dto.ProductDTO;
 import com.vlados.model.entity.Product;
 import com.vlados.model.entity.SortCriteria;
+import com.vlados.model.exception.DuplicateProductNameException;
+import com.vlados.model.exception.StoreException;
+import com.vlados.model.exception.store_exc.CantDeleteBecauseOfOrderException;
+import com.vlados.model.util.ExceptionKeys;
 import com.vlados.model.util.Page;
 import com.vlados.model.util.Pageable;
 
@@ -30,6 +34,8 @@ public class ProductService {
     public boolean addProduct(ProductDTO productDTO) {
         try (ProductDao productDao = daoFactory.createProductDao()) {
             return productDao.create(new Product(productDTO));
+        } catch (Exception e) {
+            throw new DuplicateProductNameException(ExceptionKeys.DUPLICATE_PRODUCT_NAME);
         }
     }
 
@@ -43,12 +49,18 @@ public class ProductService {
     public boolean editProduct(ProductDTO productDTO) {
         try (ProductDao productDao = daoFactory.createProductDao()) {
             return productDao.update(new Product(productDTO));
+        } catch (Exception e) {
+            //TODO log
+            throw new DuplicateProductNameException(ExceptionKeys.DUPLICATE_PRODUCT_NAME);
         }
     }
 
     public boolean deleteById(long id) {
         try (ProductDao productDao = daoFactory.createProductDao()) {
             return productDao.delete(id);
+        } catch (Exception e) {
+            //TODO log
+            throw new CantDeleteBecauseOfOrderException(ExceptionKeys.CANT_DELETE_BECAUSE_OF_ORDER);
         }
     }
 

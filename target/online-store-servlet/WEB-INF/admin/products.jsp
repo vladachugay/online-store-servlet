@@ -151,5 +151,12 @@
     </nav>
 </div>
 <%@include file="/partials/footer.jspf" %>
+<c:if test="${param.error_message!=null}">
+    <script type="text/javascript">
+        $(document).ready(function() {
+            alert('<fmt:message key="${param.error_message}"/>');
+        });
+    </script>
+</c:if>
 </body>
 </html>
