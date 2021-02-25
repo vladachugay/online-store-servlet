@@ -67,7 +67,7 @@
     <form method="post" action="/user/cart/add/${requestScope.product.id}">
         <div class="input-group">
             <input type="button" value="-" class="button-minus" onclick="document.getElementById('product-quantity').value--">
-            <input type="number" min="1" id="product-quantity" required step="1" value="1" name="quantity" class="quantity-field">
+            <input type="number" min="1" required id="product-quantity" step="1" value="1" name="quantity" class="quantity-field">
             <input type="button" value="+" class="button-plus" onclick="document.getElementById('product-quantity').value++">
         </div>
         <button class="btn btn-pink" type="submit"><fmt:message key="product.add_to_cart"/></button>

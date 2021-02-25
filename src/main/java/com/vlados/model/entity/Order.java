@@ -87,14 +87,12 @@ public class Order {
         return id.equals(order.id) &&
                 totalPrice.equals(order.totalPrice) &&
                 Objects.equals(creationDate, order.creationDate) &&
-                status == order.status &&
-                user.equals(order.user) &&
-                orderProducts.equals(order.orderProducts);
+                status == order.status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, totalPrice, creationDate, status, user, orderProducts);
+        return Objects.hash(id, totalPrice, creationDate, status);
     }
 
     public static Order.OrderBuilder builder() {

@@ -8,17 +8,11 @@ import java.util.List;
 
 public interface OrderDao extends GenericDao<Order> {
 
-    void changeStatus(Long id, Order.Status status);
-
     List<Order> findByUser(User user);
 
     List<Order> findAllWithUsers();
 
     boolean payOrderById(long id);
 
-    boolean addProductsToOrder(Order order) throws SQLException;
-
-    long createAndGetNewId(Order order);
-
-    boolean closeOrderById(long id);
+    boolean cancelOrderById(long id);
 }

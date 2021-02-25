@@ -73,6 +73,11 @@
         <p class="text-center font-weight-bold">
             <fmt:message key="cart.total_price"/><c:out value="${sessionScope.cart.totalPrice}"/>
         </p>
+        <c:if test="${requestScope.error_message!=null}">
+            <div class="alert alert-danger" role="alert">
+                <fmt:message key="${requestScope.error_message}"/>
+            </div>
+        </c:if>
         <div align="center">
             <form method="post" action="/admin/orders/create">
                 <button class="btn btn-outline-success" type="submit">

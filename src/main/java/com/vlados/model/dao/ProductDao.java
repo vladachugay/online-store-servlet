@@ -12,9 +12,9 @@ public interface ProductDao extends GenericDao<Product> {
 
     List<Product> findAll();
 
-    boolean reduceAmountById(long id, int quantity);
-
-    boolean increaseAmountById(long id, int quantity);
+//    boolean reduceAmountById(long id, int quantity);
+//
+//    boolean increaseAmountById(long id, int quantity);
 
     Page<Product> findFiltered(Pageable pageable, String sortCriteria, String category,
                                String material, BigDecimal priceFrom, BigDecimal priceTo);

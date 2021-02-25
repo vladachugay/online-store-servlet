@@ -35,7 +35,6 @@ public class LogInCommand implements Command {
         }
 
         if (CommandUtility.checkUserIsLogged(request, username)) {
-            System.err.println("user has already logged in");
             request.setAttribute("username", username);
             request.setAttribute("error_message", ExceptionKeys.USER_LOGGED);
             return ERROR;

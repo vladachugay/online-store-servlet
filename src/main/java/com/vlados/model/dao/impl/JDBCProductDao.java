@@ -5,6 +5,8 @@ import com.vlados.model.dao.impl.query.ProductQueries;
 import com.vlados.model.dao.mapper.ProductMapper;
 import com.vlados.model.entity.Product;
 import com.vlados.model.entity.SortCriteria;
+import com.vlados.model.exception.store_exc.NotEnoughProductsException;
+import com.vlados.model.util.ExceptionKeys;
 import com.vlados.model.util.Page;
 import com.vlados.model.util.Pageable;
 
@@ -22,29 +24,29 @@ public class JDBCProductDao implements ProductDao {
         this.connection = connection;
     }
 
-    @Override
-    public boolean reduceAmountById(long id, int quantity) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(ProductQueries.REDUCE_AMOUNT)) {
-            preparedStatement.setInt(1, quantity);
-            preparedStatement.setLong(2, id);
-            return preparedStatement.execute();
-        } catch (SQLException e) {
-            System.err.println("cant reduce amount");
-        }
-        return false;
-    }
-
-    @Override
-    public boolean increaseAmountById(long id, int quantity) {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(ProductQueries.INCREASE_AMOUNT)) {
-            preparedStatement.setInt(1, quantity);
-            preparedStatement.setLong(2, id);
-            return preparedStatement.execute();
-        } catch (SQLException e) {
-            System.err.println("cant increase amount");
-        }
-        return false;
-    }
+//    @Override
+//    public boolean reduceAmountById(long id, int quantity) {
+//        try (PreparedStatement preparedStatement = connection.prepareStatement(ProductQueries.REDUCE_AMOUNT)) {
+//            preparedStatement.setInt(1, quantity);
+//            preparedStatement.setLong(2, id);
+//            return preparedStatement.execute();
+//        } catch (SQLException e) {
+//            //TODO log
+//            throw new RuntimeException();
+//        }
+//    }
+//
+//    @Override
+//    public boolean increaseAmountById(long id, int quantity) {
+//        try (PreparedStatement preparedStatement = connection.prepareStatement(ProductQueries.INCREASE_AMOUNT)) {
+//            preparedStatement.setInt(1, quantity);
+//            preparedStatement.setLong(2, id);
+//            return preparedStatement.execute();
+//        } catch (SQLException e) {
+//            System.err.println("cant increase amount");
+//        }
+//        return false;
+//    }
 
 
     @Override
@@ -63,7 +65,7 @@ public class JDBCProductDao implements ProductDao {
         } catch (SQLException e) {
             //TODO log
             System.err.println("cant add new product");
-            throw  new RuntimeException();
+            throw new RuntimeException();
         }
     }
 

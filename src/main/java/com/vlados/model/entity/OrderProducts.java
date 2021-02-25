@@ -7,9 +7,7 @@ public class OrderProducts {
     private Product product;
     private int amount;
 
-    public OrderProducts() {
-
-    }
+    public OrderProducts() {}
 
     public OrderProducts(Order order, Product product, Integer amount) {
         this.order = order;

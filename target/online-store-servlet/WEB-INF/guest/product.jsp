@@ -68,7 +68,7 @@
         <div class="input-group">
             <input type="button" value="-" class="button-minus" data-field="quantity"
                    onclick="document.getElementById('product-quantity').value--">
-            <input type="number" id="product-quantity" step="1" value="1" name="quantity" class="quantity-field">
+            <input type="number" min="1" required id="product-quantity" step="1" value="1" name="quantity" class="quantity-field">
             <input type="button" value="+" class="button-plus" data-field="quantity"
                    onclick="document.getElementById('product-quantity').value++">
         </div>
