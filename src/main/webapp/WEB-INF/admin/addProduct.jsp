@@ -40,7 +40,6 @@
 
 
 <div class="container mt-2">
-<%--    <form method="post" action="/admin/products/add" enctype="multipart/form-data">--%>
     <form method="post" action="/admin/products/add">
         <div class="form-group">
             <label><fmt:message key="product.name"/> </label>
@@ -82,11 +81,6 @@
             <c:if  test="${requestScope.errors.containsKey('material')}">
                 <div style="color:red"><fmt:message key="${requestScope.errors.get('material')}"/></div>
             </c:if>
-        </div>
-
-        <div class="custom-file">
-            <label class="custom-file-label" for="file"><fmt:message key="product.choose_file"/></label>
-            <input type="file" class="custom-file-input" id="file" name="file">
         </div>
 
         <div class="form-group mt-3">

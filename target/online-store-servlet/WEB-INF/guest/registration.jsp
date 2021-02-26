@@ -51,6 +51,7 @@
     <div class="login-main-text">
         <h2><fmt:message key="registration"/></h2>
         <p><fmt:message key="login_or_register"/></p>
+        <a href="/guest/products" style="color: #412E2E"><fmt:message key="continue_as_guest"/></a>
     </div>
 </div>
 <div class="main">

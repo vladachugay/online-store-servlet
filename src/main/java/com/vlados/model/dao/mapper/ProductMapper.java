@@ -15,7 +15,6 @@ public class ProductMapper implements ObjectMapper<Product> {
                 .category(Product.Category.valueOf(rs.getString("category")))
                 .material(Product.Material.valueOf(rs.getString("material")))
                 .date(rs.getTimestamp("date").toLocalDateTime())
-                .picPath(rs.getString("pic_path"))
                 .description(rs.getString("description"))
                 .price(rs.getBigDecimal("price"))
                 .amount(rs.getInt("amount"))

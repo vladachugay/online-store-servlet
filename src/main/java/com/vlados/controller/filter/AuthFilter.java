@@ -1,6 +1,8 @@
 package com.vlados.controller.filter;
 
 import com.vlados.model.entity.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
@@ -15,8 +17,10 @@ public class AuthFilter implements Filter {
     private static final String GUEST_DOMAIN = "^(/)$|^(/login)$|^(/registration)$";
     private static final String LOGOUT_DOMAIN = "/logout";
 
+    private final Logger logger = LogManager.getLogger(AuthFilter.class);
+
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
 
     }
 
@@ -38,6 +42,7 @@ public class AuthFilter implements Filter {
                 resp.sendRedirect("/login");
                 return;
             }
+            logger.error("(username: {}) Forbidden uri: {}", session.getAttribute("username"), req.getRequestURI());
             resp.sendError(403);
             return;
         }

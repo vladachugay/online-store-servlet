@@ -11,6 +11,8 @@ import com.vlados.model.entity.User;
 import com.vlados.model.exception.StoreException;
 import com.vlados.model.exception.store_exc.NotEnoughProductsException;
 import com.vlados.model.util.ExceptionKeys;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.*;
@@ -19,6 +21,7 @@ public class JDBCOrderDao implements OrderDao {
     private final Connection connection;
     private final OrderMapper orderMapper = new OrderMapper();
     private final OrderProductsMapper opMapper = new OrderProductsMapper();
+    private static final Logger logger = LogManager.getLogger(JDBCOrderDao.class);
 
 
     public JDBCOrderDao(Connection connection) {
@@ -35,9 +38,8 @@ public class JDBCOrderDao implements OrderDao {
                 orders.add(orderMapper.extractFromResultSet(rs));
             }
         } catch (SQLException ex) {
-            System.err.println("cant get user's orders");
-            //TODO log
-            //TODO handle exception
+            logger.error("{} while getting orders for user with id {}", ex.getMessage(), user.getId());
+            throw new RuntimeException();
         }
         return orders;
     }
@@ -53,9 +55,8 @@ public class JDBCOrderDao implements OrderDao {
                 orderMapper.extractFromResultSetWithUsers(rs, orders, users);
             }
         } catch (SQLException ex) {
-            System.err.println(ex.getMessage());
-            //TODO log
-            //TODO handle exception
+            logger.error("{} while getting all orders with their users", ex.getMessage());
+            throw new RuntimeException();
         }
 
         return new ArrayList<>(orders.values());
@@ -89,6 +90,7 @@ public class JDBCOrderDao implements OrderDao {
             connection.commit();
             return true;
         } catch (SQLException e) {
+            logger.error("{} while creating new order", e.getMessage());
             rollback(connection);
             throw new RuntimeException();
         } catch (StoreException e) {
@@ -116,6 +118,7 @@ public class JDBCOrderDao implements OrderDao {
             connection.commit();
             return true;
         } catch (SQLException e) {
+            logger.error("{} while canceling order with id {}", e.getMessage(), id);
             rollback(connection);
             throw new RuntimeException();
         }
@@ -127,29 +130,29 @@ public class JDBCOrderDao implements OrderDao {
             preparedStatement.setLong(1, id);
             return preparedStatement.execute();
         } catch (SQLException e) {
-            System.err.println("Cant pay product ");
+            logger.error("{} while changing status to paid for order with id {}", e.getMessage(), id);
         }
         return false;
     }
 
     @Override
     public Optional<Order> findById(long id) {
-        return Optional.empty();
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public List<Order> findAll() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean update(Order entity) {
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean delete(long id) {
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -157,6 +160,7 @@ public class JDBCOrderDao implements OrderDao {
         try {
             connection.close();
         } catch (SQLException e) {
+            logger.error("{} while trying to close connection", e.getMessage());
             throw new RuntimeException(e);
         }
     }
@@ -186,6 +190,7 @@ public class JDBCOrderDao implements OrderDao {
         try {
             connection.rollback();
         } catch (SQLException exception) {
+            logger.error("{} while trying to rollback", exception.getMessage());
             throw new RuntimeException();
         }
     }

@@ -1,5 +1,6 @@
-package com.vlados.controller.command;
+package com.vlados.controller.command.admin;
 
+import com.vlados.controller.command.Command;
 import com.vlados.model.dto.ProductDTO;
 import com.vlados.model.exception.StoreException;
 import com.vlados.model.service.ProductService;

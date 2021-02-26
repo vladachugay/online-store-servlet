@@ -40,40 +40,53 @@
 <%@include file="/partials/guestNav.jspf" %>
 
 <div class="container mt-3">
-    <div class="row">
-        <div class="col">
-            Picture will be located here
-        </div>
+    <div class="row justify-content-center">
         <div class="col">
             <ul>
-                <li>
-                    <p><c:out value="${requestScope.product.name}"/></p>
+                <li class="list-group-item">
+                    <label for="name" class="font-weight-light"><fmt:message key="product.name"/></label>
+                    <p id="name"><c:out value="${requestScope.product.name}"/></p>
                 </li>
-                <li>
-                    <p><c:out value="${requestScope.product.category}"/></p>
+                <li class="list-group-item">
+                    <label for="category" class="font-weight-light"><fmt:message key="product.category"/></label>
+                    <p id="category"><fmt:message key="${requestScope.product.category}"/></p>
                 </li>
-                <li>
-                    <p><c:out value="${requestScope.product.material}"/></p>
+                <li class="list-group-item">
+                    <label for="material" class="font-weight-light"><fmt:message key="product.material"/></label>
+                    <p id="material"><fmt:message key="${requestScope.product.material}"/></p>
                 </li>
-                <li>
-                    <p><c:out value="${requestScope.product.description}"/></p>
+                <li class="list-group-item">
+                    <label for="description" class="font-weight-light"><fmt:message key="product.description"/></label>
+                    <p id="description"><c:out value="${requestScope.product.description}"/></p>
                 </li>
-                <li>
-                    <p><c:out value="${requestScope.product.price}"/></p>
+                <li class="list-group-item">
+                    <label for="price" class="font-weight-light"><fmt:message key="product.price"/></label>
+                    <p id="price"><c:out value="${requestScope.product.price}"/></p>
                 </li>
             </ul>
+            <div class="row justify-content-center">
+                <fmt:message key="product.available"/><c:out value="${requestScope.product.amount}"/>
+            </div>
+            <form method="post" action="/guest/cart/add/<c:out value="${requestScope.product.id}"/>">
+                <div class="row justify-content-center">
+                    <div class="input-group">
+                        <input type="button" value="-" class="button-minus" data-field="quantity"
+                               onclick="document.getElementById('product-quantity').value--">
+                        <input type="number" min="1" required id="product-quantity" step="1" value="1"
+                               name="quantity" class="quantity-field">
+                        <input type="button" value="+" class="button-plus" data-field="quantity"
+                               onclick="document.getElementById('product-quantity').value++">
+                    </div>
+                </div>
+                <div class="row justify-content-center">
+                    <button class="btn btn-pink" type="submit"
+                    ${requestScope.product.amount <= 0 ? 'disabled' : ''}>
+                        <fmt:message key="product.add_to_cart"/>
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
-    <form method="post" action="/guest/cart/add/<c:out value="${requestScope.product.id}"/>">
-        <div class="input-group">
-            <input type="button" value="-" class="button-minus" data-field="quantity"
-                   onclick="document.getElementById('product-quantity').value--">
-            <input type="number" min="1" required id="product-quantity" step="1" value="1" name="quantity" class="quantity-field">
-            <input type="button" value="+" class="button-plus" data-field="quantity"
-                   onclick="document.getElementById('product-quantity').value++">
-        </div>
-        <button class="btn btn-pink" type="submit"><fmt:message key="product.add_to_cart"/></button>
-    </form>
 </div>
 <%@include file="/partials/footer.jspf" %>
 </body>

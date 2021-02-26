@@ -1,8 +1,11 @@
 package com.vlados.controller;
 
 import com.vlados.controller.command.*;
+import com.vlados.controller.command.admin.*;
 import com.vlados.controller.command.guest.*;
 import com.vlados.model.service.ServiceFactory;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -19,6 +22,8 @@ public class MainServlet extends HttpServlet {
     private final Map<String, Command> getCommands = new ConcurrentHashMap<>();
     private final Map<String, Command> postCommands = new ConcurrentHashMap<>();
     private static final String COMMAND_NOT_FOUND = "COMMAND NOT FOUND";
+
+    private final Logger logger = LogManager.getLogger(MainServlet.class);
 
 
     @Override
@@ -111,6 +116,7 @@ public class MainServlet extends HttpServlet {
                 .orElse(COMMAND_NOT_FOUND);
 
         if (key.equals(COMMAND_NOT_FOUND)) {
+            logger.warn("(username: {}) error 404: page not found", request.getSession().getAttribute("username"));
             response.sendError(404);
             return;
         }
@@ -119,8 +125,15 @@ public class MainServlet extends HttpServlet {
         String result;
         try {
             result = command.execute(request);
+        }
+            catch (NumberFormatException e) {
+                logger.error("(username: {}) number format exception (bad request): {}",
+                        request.getSession().getAttribute("username"), e.getMessage());
+                response.sendError(400);
+                return;
         } catch (Exception e) {
-            //todo exception
+            logger.error("internal server error");
+            response.sendError(500);
             return;
         }
 

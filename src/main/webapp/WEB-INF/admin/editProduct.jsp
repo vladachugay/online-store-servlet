@@ -84,11 +84,6 @@
             </c:if>
         </div>
 
-        <div class="custom-file">
-            <label class="custom-file-label" for="file"><fmt:message key="product.choose_file"/></label>
-            <input type="file" class="custom-file-input" id="file" name="file">
-        </div>
-
         <div class="form-group mt-3">
             <label for="description"><fmt:message key="product.description"/></label>
             <textarea class="form-control" id="description" name="description" rows="3" >

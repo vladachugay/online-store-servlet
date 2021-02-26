@@ -23,6 +23,7 @@ public class LogOutCommand implements Command {
         loggedUsers.remove(username);
         context.setAttribute("loggedUsers", loggedUsers);
 
+        //TODO clear cart
         return "redirect:/login";
     }
 }

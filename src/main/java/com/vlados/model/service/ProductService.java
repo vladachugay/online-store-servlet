@@ -9,9 +9,12 @@ import com.vlados.model.exception.DuplicateProductNameException;
 import com.vlados.model.exception.StoreException;
 import com.vlados.model.exception.store_exc.CantDeleteBecauseOfOrderException;
 import com.vlados.model.exception.store_exc.NotEnoughProductsException;
+import com.vlados.model.exception.store_exc.login_exc.UserDoesntExist;
 import com.vlados.model.util.ExceptionKeys;
 import com.vlados.model.util.Page;
 import com.vlados.model.util.Pageable;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -20,6 +23,7 @@ import java.util.Optional;
 public class ProductService {
 
     private final DaoFactory daoFactory;
+    private final Logger logger = LogManager.getLogger(ProductService.class);
 
     public ProductService(DaoFactory daoFactory) {
         this.daoFactory = daoFactory;
@@ -36,14 +40,17 @@ public class ProductService {
         try (ProductDao productDao = daoFactory.createProductDao()) {
             return productDao.create(new Product(productDTO));
         } catch (Exception e) {
+            logger.error("{} while adding new product", e.getMessage());
             throw new DuplicateProductNameException(ExceptionKeys.DUPLICATE_PRODUCT_NAME);
         }
     }
 
     public Product findById(long id) {
         try (ProductDao productDao = daoFactory.createProductDao()) {
-            return productDao.findById(id).get();
-            //TODO check optional
+            return productDao.findById(id).orElseThrow(()-> {
+                logger.error("Cant find product with id {}", id);
+                throw new RuntimeException();
+            });
         }
     }
 
@@ -51,7 +58,7 @@ public class ProductService {
         try (ProductDao productDao = daoFactory.createProductDao()) {
             return productDao.update(new Product(productDTO));
         } catch (Exception e) {
-            //TODO log
+            logger.error("{} while editing product with id {}", e.getMessage(), productDTO.getId());
             throw new DuplicateProductNameException(ExceptionKeys.DUPLICATE_PRODUCT_NAME);
         }
     }
@@ -60,7 +67,7 @@ public class ProductService {
         try (ProductDao productDao = daoFactory.createProductDao()) {
             return productDao.delete(id);
         } catch (Exception e) {
-            //TODO log
+            logger.error("{} while deleting product with id {}", e.getMessage(), id);
             throw new CantDeleteBecauseOfOrderException(ExceptionKeys.CANT_DELETE_BECAUSE_OF_ORDER);
         }
     }

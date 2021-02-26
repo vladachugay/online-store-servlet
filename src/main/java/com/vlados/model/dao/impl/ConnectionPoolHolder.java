@@ -1,6 +1,8 @@
 package com.vlados.model.dao.impl;
 
 import org.apache.commons.dbcp2.BasicDataSource;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import javax.sql.DataSource;
 import java.io.FileReader;
@@ -10,7 +12,9 @@ public class ConnectionPoolHolder {
 
     private static final String DB_PROPERTIES =
             "C:\\Users\\ConnecT\\Desktop\\epam\\online-store-servlet\\src\\main\\resources\\db.properties";
+    //TODO use relative path instead of absolute
     private static volatile DataSource dataSource;
+    private static final Logger logger = LogManager.getLogger(ConnectionPoolHolder.class);
 
     public static DataSource getDataSource() {
         if (dataSource == null) {
@@ -30,7 +34,8 @@ public class ConnectionPoolHolder {
                         ds.setDriverClassName(p.getProperty("db.driver.class.name"));
                         dataSource = ds;
                     } catch (Exception e) {
-                        //TODO handle exception
+                        logger.fatal("Problem with connecting to db: {}", e.getMessage());
+                        System.exit(-1);
                     }
                 }
             }

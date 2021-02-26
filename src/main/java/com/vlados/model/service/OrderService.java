@@ -69,25 +69,4 @@ public class OrderService {
             return orderDao.findByUser(user);
         }
     }
-
-    private UserTransaction openTransaction() {
-        UserTransactionImp userTransactionImp = new UserTransactionImp();
-        try {
-            userTransactionImp.begin();
-        } catch (NotSupportedException | SystemException e) {
-            throw new RuntimeException();
-        }
-        return userTransactionImp;
-    }
-
-    private void closeTransaction(UserTransaction userTransaction) {
-        try {
-            userTransaction.commit();
-        } catch (Exception e) {
-            try {
-                userTransaction.rollback();
-            } catch (Exception e1) {
-            }
-        }
-    }
 }

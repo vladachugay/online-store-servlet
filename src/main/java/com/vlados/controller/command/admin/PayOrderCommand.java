@@ -1,10 +1,11 @@
-package com.vlados.controller.command;
+package com.vlados.controller.command.admin;
 
+import com.vlados.controller.command.Command;
 import com.vlados.model.service.OrderService;
 
 import javax.servlet.http.HttpServletRequest;
 
-public class PayOrderCommand implements Command{
+public class PayOrderCommand implements Command {
     private final OrderService orderService;
 
     public PayOrderCommand(OrderService orderService) {

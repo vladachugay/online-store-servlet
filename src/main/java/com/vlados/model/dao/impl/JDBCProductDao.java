@@ -5,10 +5,10 @@ import com.vlados.model.dao.impl.query.ProductQueries;
 import com.vlados.model.dao.mapper.ProductMapper;
 import com.vlados.model.entity.Product;
 import com.vlados.model.entity.SortCriteria;
-import com.vlados.model.exception.store_exc.NotEnoughProductsException;
-import com.vlados.model.util.ExceptionKeys;
 import com.vlados.model.util.Page;
 import com.vlados.model.util.Pageable;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.sql.*;
@@ -19,34 +19,11 @@ import java.util.Optional;
 public class JDBCProductDao implements ProductDao {
     private final Connection connection;
     private final ProductMapper productMapper = new ProductMapper();
+    private static final Logger logger = LogManager.getLogger(JDBCProductDao.class);
 
     public JDBCProductDao(Connection connection) {
         this.connection = connection;
     }
-
-//    @Override
-//    public boolean reduceAmountById(long id, int quantity) {
-//        try (PreparedStatement preparedStatement = connection.prepareStatement(ProductQueries.REDUCE_AMOUNT)) {
-//            preparedStatement.setInt(1, quantity);
-//            preparedStatement.setLong(2, id);
-//            return preparedStatement.execute();
-//        } catch (SQLException e) {
-//            //TODO log
-//            throw new RuntimeException();
-//        }
-//    }
-//
-//    @Override
-//    public boolean increaseAmountById(long id, int quantity) {
-//        try (PreparedStatement preparedStatement = connection.prepareStatement(ProductQueries.INCREASE_AMOUNT)) {
-//            preparedStatement.setInt(1, quantity);
-//            preparedStatement.setLong(2, id);
-//            return preparedStatement.execute();
-//        } catch (SQLException e) {
-//            System.err.println("cant increase amount");
-//        }
-//        return false;
-//    }
 
 
     @Override
@@ -56,15 +33,12 @@ public class JDBCProductDao implements ProductDao {
             preparedStatement.setBigDecimal(2, product.getPrice());
             preparedStatement.setString(3, product.getCategory().name());
             preparedStatement.setString(4, product.getMaterial().name());
-            preparedStatement.setString(5, product.getPicPath());
-            preparedStatement.setTimestamp(6, Timestamp.valueOf(product.getDate()));
-            preparedStatement.setString(7, product.getDescription());
-            preparedStatement.setInt(8, product.getAmount());
-            System.out.println("dao statement: " + preparedStatement);
+            preparedStatement.setTimestamp(5, Timestamp.valueOf(product.getDate()));
+            preparedStatement.setString(6, product.getDescription());
+            preparedStatement.setInt(7, product.getAmount());
             return preparedStatement.execute();
         } catch (SQLException e) {
-            //TODO log
-            System.err.println("cant add new product");
+            logger.error("{} while creating new product", e.getMessage());
             throw new RuntimeException();
         }
     }
@@ -79,7 +53,7 @@ public class JDBCProductDao implements ProductDao {
                 product = productMapper.extractFromResultSet(rs);
             }
         } catch (SQLException e) {
-            System.err.println("cant find product");
+            logger.error("{} while trying to find product with id {}", e.getMessage(), id);
             throw new RuntimeException();
         }
         return Optional.ofNullable(product);
@@ -94,9 +68,8 @@ public class JDBCProductDao implements ProductDao {
                 products.add(productMapper.extractFromResultSet(rs));
             }
         } catch (SQLException ex) {
-            //TODO log
-            //TODO handle exception
-            System.err.println(ex.getMessage());
+            logger.error("{} while trying to find all products", ex.getMessage());
+            throw new RuntimeException();
         }
         return products;
     }
@@ -106,16 +79,14 @@ public class JDBCProductDao implements ProductDao {
                                       String material, BigDecimal priceFrom, BigDecimal priceTo) {
         List<Product> products = new ArrayList<>();
         String query = generateQuery(SortCriteria.valueOf(sortCriteria), category, material, priceFrom, priceTo);
-        System.out.println(query);
         try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 products.add(productMapper.extractFromResultSet(rs));
             }
         } catch (SQLException ex) {
-            //TODO log
-            //TODO handle exception
-            System.err.println(ex.getMessage());
+            logger.error("{} while trying to find filtered products", ex.getMessage());
+            throw new RuntimeException();
         }
 
         int firstProductInPageIndex = pageable.getSizeOfPage() * pageable.getCurrentPage();
@@ -129,19 +100,16 @@ public class JDBCProductDao implements ProductDao {
     @Override
     public boolean update(Product product) {
         try (PreparedStatement preparedStatement = connection.prepareStatement(ProductQueries.UPDATE)) {
-            System.out.println(product);
             preparedStatement.setString(1, product.getName());
             preparedStatement.setBigDecimal(2, product.getPrice());
             preparedStatement.setString(3, product.getCategory().name());
             preparedStatement.setString(4, product.getMaterial().name());
-            preparedStatement.setString(5, product.getPicPath());
-            preparedStatement.setString(6, product.getDescription());
-            preparedStatement.setInt(7, product.getAmount());
-            preparedStatement.setLong(8, product.getId());
-            System.out.println(preparedStatement);
+            preparedStatement.setString(5, product.getDescription());
+            preparedStatement.setInt(6, product.getAmount());
+            preparedStatement.setLong(7, product.getId());
             return preparedStatement.execute();
         } catch (SQLException e) {
-            //TODO log
+            logger.error("{} while updating product with id {}", e.getMessage(), product.getId());
             throw new RuntimeException();
         }
     }
@@ -150,10 +118,9 @@ public class JDBCProductDao implements ProductDao {
     public boolean delete(long id) {
         try (PreparedStatement preparedStatement = connection.prepareStatement(ProductQueries.DELETE_BY_ID)) {
             preparedStatement.setLong(1, id);
-            System.out.println(preparedStatement);
             return preparedStatement.execute();
         } catch (SQLException ex) {
-            //TODO log
+            logger.error("{} while deleting product with id {}", ex.getMessage(), id);
             throw new RuntimeException();
         }
     }
@@ -163,6 +130,7 @@ public class JDBCProductDao implements ProductDao {
         try {
             connection.close();
         } catch (SQLException e) {
+            logger.error("{} while trying to close connection", e.getMessage());
             throw new RuntimeException(e);
         }
     }

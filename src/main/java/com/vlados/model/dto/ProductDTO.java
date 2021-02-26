@@ -10,7 +10,6 @@ public class ProductDTO {
     private String name;
     private Product.Category category;
     private Product.Material material;
-    private String picPath;
     private LocalDateTime date;
     private String description;
     private BigDecimal price;
@@ -57,14 +56,6 @@ public class ProductDTO {
         this.amount = amount;
     }
 
-    public String getPicPath() {
-        return picPath;
-    }
-
-    public void setPicPath(String picPath) {
-        this.picPath = picPath;
-    }
-
     public LocalDateTime getDate() {
         return date;
     }
@@ -99,7 +90,6 @@ public class ProductDTO {
                 "name='" + name + '\'' +
                 ", category=" + category +
                 ", material=" + material +
-                ", picPath='" + picPath + '\'' +
                 ", date=" + date +
                 ", description='" + description + '\'' +
                 ", price=" + price +
@@ -108,13 +98,12 @@ public class ProductDTO {
     }
 
     public ProductDTO(final Long id, final String name, final Product.Category category, final Product.Material material,
-                      final String picPath, final LocalDateTime date, final String description,
+                      final LocalDateTime date, final String description,
                       final BigDecimal price, final Integer amount) {
         this.id = id;
         this.name = name;
         this.category = category;
         this.material = material;
-        this.picPath = picPath;
         this.date = date;
         this.description = description;
         this.price = price;
@@ -128,7 +117,6 @@ public class ProductDTO {
         private String name;
         private Product.Category category;
         private Product.Material material;
-        private String picPath;
         private LocalDateTime date;
         private String description;
         private BigDecimal price;
@@ -158,13 +146,6 @@ public class ProductDTO {
             return this;
         }
 
-
-
-        public ProductDTO.ProductDTOBuilder picPath(final String picPath) {
-            this.picPath = picPath;
-            return this;
-        }
-
         public ProductDTO.ProductDTOBuilder date(final LocalDateTime date) {
             this.date = date;
             return this;
@@ -187,7 +168,7 @@ public class ProductDTO {
 
         public ProductDTO build() {
             System.out.println("build");
-            return new ProductDTO(id, name, category, material, picPath, date, description, price, amount);
+            return new ProductDTO(id, name, category, material, date, description, price, amount);
         }
     }
 }

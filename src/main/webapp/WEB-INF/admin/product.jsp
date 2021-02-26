@@ -89,7 +89,6 @@
         </div>
     </div>
 </div>
-</div>
 <%@include file="/partials/footer.jspf" %>
 </body>
 </html>

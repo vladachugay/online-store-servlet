@@ -5,11 +5,10 @@ import com.vlados.model.entity.User;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashSet;
 import java.util.Map;
 
 public class OrderMapper implements ObjectMapper<Order>{
-    private UserMapper userMapper = new UserMapper();
+    private final UserMapper userMapper = new UserMapper();
 
     @Override
     public Order extractFromResultSet(ResultSet rs) throws SQLException {
@@ -32,6 +31,7 @@ public class OrderMapper implements ObjectMapper<Order>{
                                                Map<Long, User> users) throws SQLException {
         Order order = makeUnique(orders, extractFromResultSet(rs));
         order.setUser(userMapper.makeUnique(users, userMapper.extractFromResultSet(rs)));
+        //TODO how does it work??
         return order;
     }
 }

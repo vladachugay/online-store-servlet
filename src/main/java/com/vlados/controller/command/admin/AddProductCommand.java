@@ -1,5 +1,6 @@
-package com.vlados.controller.command;
+package com.vlados.controller.command.admin;
 
+import com.vlados.controller.command.Command;
 import com.vlados.controller.util.Validator;
 import com.vlados.model.dto.ProductDTO;
 import com.vlados.model.entity.Product;

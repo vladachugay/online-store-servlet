@@ -1,5 +1,6 @@
-package com.vlados.controller.command;
+package com.vlados.controller.command.admin;
 
+import com.vlados.controller.command.Command;
 import com.vlados.controller.util.Validator;
 import com.vlados.model.dto.ProductDTO;
 import com.vlados.model.entity.Product;
@@ -11,7 +12,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Map;
 
-public class EditProductCommand implements Command{
+public class EditProductCommand implements Command {
 
     private static final String ERROR = "/WEB-INF/admin/editProduct.jsp";
     private static final String REDIRECT_PRODUCTS = "redirect:/admin/products";

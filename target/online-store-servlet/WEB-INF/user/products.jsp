@@ -100,7 +100,6 @@
         <c:forEach var="product" items="${products}">
         <div class="col-md-4 my-3">
             <div class="card">
-                <img class="card-img-top" src="${product.picPath}">
                 <div class="card-body">
                     <h5 class="card-title">
                         <a href="/user/products/<c:out value="${product.id}"/>"><

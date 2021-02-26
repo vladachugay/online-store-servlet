@@ -4,12 +4,11 @@ public class ProductQueries {
 
     public static final String FIND_ALL = "select * from products";
     public static final String CREATE = "insert into products (name, price, category, material," +
-            " pic_path, date, description, amount) values (?, ?, ?, ?, ?, ?, ?, ?)";
+            " date, description, amount) values (?, ?, ?, ?, ?, ?, ?)";
     public static final String UPDATE = "update products set name = ?, " +
             "price = ?, " +
             "category = ?, " +
             "material = ?, " +
-            "pic_path = ?, " +
             "description = ?," +
             "amount = ? " +
             "where product_id = ? ";
@@ -21,6 +20,8 @@ public class ProductQueries {
     public static final String INCREASE_AMOUNT = "update products set amount = amount + ? where product_id = ?";
     public static final String REDUCE_AMOUNT = "update products set amount = amount - ? where product_id = ?";
     public static final String GET_PRODUCTS_ID_BY_ORDER_ID = "select * from order_products where order_id = ?";
+
+
     /////////////////
     //   Partials
     /////////////////

@@ -4,8 +4,8 @@ import com.vlados.model.dao.UserDao;
 import com.vlados.model.dao.impl.query.UserQueries;
 import com.vlados.model.dao.mapper.UserMapper;
 import com.vlados.model.entity.User;
-import com.vlados.model.exception.store_exc.DuplicateUsernameException;
-import com.vlados.model.util.ExceptionKeys;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,6 +15,7 @@ import java.util.Optional;
 public class JDBCUserDao implements UserDao {
     private final Connection connection;
     private final UserMapper userMapper = new UserMapper();
+    private final static Logger logger = LogManager.getLogger(JDBCUserDao.class);
 
 
     public JDBCUserDao(Connection connection) {
@@ -31,7 +32,7 @@ public class JDBCUserDao implements UserDao {
                 user = userMapper.extractFromResultSet(rs);
             }
         } catch (SQLException e) {
-            System.err.println("cant find user");
+            logger.error("{} while trying to find user by username {}", e.getMessage(), username);
             throw new RuntimeException();
         }
         return Optional.ofNullable(user);
@@ -43,11 +44,9 @@ public class JDBCUserDao implements UserDao {
             preparedStatement.setLong(1, id);
             return preparedStatement.execute();
         } catch (SQLException ex) {
-            //TODO handle exception
-            //TODO log
-            System.err.println("cant lock user");
+            logger.error("{} while trying to lock user with id {}", ex.getMessage(), id);
+            throw new RuntimeException();
         }
-        return false;
     }
 
     @Override
@@ -56,11 +55,9 @@ public class JDBCUserDao implements UserDao {
             preparedStatement.setLong(1, id);
             return preparedStatement.execute();
         } catch (SQLException ex) {
-            //TODO handle exception
-            //TODO log
-            System.err.println("cant unlock user");
+            logger.error("{} while trying to unlock user with id {}", ex.getMessage(), id);
+            throw new RuntimeException();
         }
-        return false;
     }
 
     @Override
@@ -75,15 +72,14 @@ public class JDBCUserDao implements UserDao {
             preparedStatement.setBoolean(7, user.isLocked());
             return preparedStatement.execute();
         } catch (SQLException e) {
-            //TODO log
-            System.err.println("Cant add new user");
-            throw  new RuntimeException();
+            logger.error("{} while creating new user", e.getMessage());
+            throw new RuntimeException();
         }
     }
 
     @Override
     public Optional<User> findById(long id) {
-        return Optional.empty();
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -95,22 +91,19 @@ public class JDBCUserDao implements UserDao {
                 users.add(userMapper.extractFromResultSet(rs));
             }
         } catch (SQLException ex) {
-            //TODO log
-            //TODO handle exception
-            System.err.println(ex.getMessage());
+            logger.error("{} while trying to find all products", ex.getMessage());
         }
         return users;
     }
 
     @Override
     public boolean update(User entity) {
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public boolean delete(long id) {
-
-        return false;
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -118,6 +111,7 @@ public class JDBCUserDao implements UserDao {
         try {
             connection.close();
         } catch (SQLException e) {
+            logger.error("{} while trying to close connection", e.getMessage());
             throw new RuntimeException(e);
         }
     }

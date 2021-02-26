@@ -11,7 +11,6 @@ public class Product {
     private String name;
     private Category category;
     private Material material;
-    private String picPath;
     private LocalDateTime date;
     private String description;
     private BigDecimal price;
@@ -23,20 +22,18 @@ public class Product {
         category = productDTO.getCategory();
         price = productDTO.getPrice();
         amount = productDTO.getAmount();
-        picPath = productDTO.getPicPath();
         material = productDTO.getMaterial();
         description = productDTO.getDescription();
         date = productDTO.getDate();
     }
 
     public Product(Long id, String name, Category category, Material material,
-                   String picPath, LocalDateTime date, String description,
+                   LocalDateTime date, String description,
                    BigDecimal price, int amount) {
         this.id = id;
         this.name = name;
         this.category = category;
         this.material = material;
-        this.picPath = picPath;
         this.date = date;
         this.description = description;
         this.price = price;
@@ -90,14 +87,6 @@ public class Product {
         this.material = material;
     }
 
-    public String getPicPath() {
-        return picPath;
-    }
-
-    public void setPicPath(String picPath) {
-        this.picPath = picPath;
-    }
-
     public LocalDateTime getDate() {
         return date;
     }
@@ -140,7 +129,6 @@ public class Product {
                 name.equals(product.name) &&
                 category == product.category &&
                 material == product.material &&
-                Objects.equals(picPath, product.picPath) &&
                 Objects.equals(date, product.date) &&
                 Objects.equals(description, product.description) &&
                 price.equals(product.price);
@@ -148,7 +136,7 @@ public class Product {
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, category, material, picPath, date, description, price, amount);
+        return Objects.hash(id, name, category, material, date, description, price, amount);
     }
 
     @Override
@@ -158,7 +146,6 @@ public class Product {
                 ", name='" + name + '\'' +
                 ", category=" + category +
                 ", material=" + material +
-                ", picPath='" + picPath + '\'' +
                 ", date=" + date +
                 ", description='" + description + '\'' +
                 ", price=" + price +
@@ -175,7 +162,6 @@ public class Product {
         private String name;
         private Category category;
         private Material material;
-        private String picPath;
         private LocalDateTime date;
         private String description;
         private BigDecimal price;
@@ -205,11 +191,6 @@ public class Product {
             return this;
         }
 
-        public Product.ProductBuilder picPath(final String picPath) {
-            this.picPath = picPath;
-            return this;
-        }
-
         public Product.ProductBuilder date(final LocalDateTime date) {
             this.date = date;
             return this;
@@ -231,7 +212,7 @@ public class Product {
         }
 
         public Product build() {
-            return new Product(id, name, category, material, picPath, date, description, price, amount);
+            return new Product(id, name, category, material, date, description, price, amount);
         }
     }
 }
