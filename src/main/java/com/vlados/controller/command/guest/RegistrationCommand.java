@@ -36,7 +36,6 @@ public class RegistrationCommand implements Command {
             request.setAttribute("errors", errors);
             return ERROR;
         }
-        //TODO log
         try {
             userService.saveUser(userDTO);
         } catch (StoreException e) {

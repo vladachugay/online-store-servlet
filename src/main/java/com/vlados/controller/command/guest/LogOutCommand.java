@@ -23,7 +23,9 @@ public class LogOutCommand implements Command {
         loggedUsers.remove(username);
         context.setAttribute("loggedUsers", loggedUsers);
 
-        //TODO clear cart
+        Cart cart = (Cart) request.getSession().getAttribute("cart");
+        cart.clear();
+        request.getSession().setAttribute("cart", cart);
         return "redirect:/login";
     }
 }

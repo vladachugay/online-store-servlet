@@ -31,7 +31,6 @@ public class OrderMapper implements ObjectMapper<Order>{
                                                Map<Long, User> users) throws SQLException {
         Order order = makeUnique(orders, extractFromResultSet(rs));
         order.setUser(userMapper.makeUnique(users, userMapper.extractFromResultSet(rs)));
-        //TODO how does it work??
         return order;
     }
 }

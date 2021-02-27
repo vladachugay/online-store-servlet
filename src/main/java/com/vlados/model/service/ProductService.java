@@ -4,12 +4,8 @@ import com.vlados.model.dao.DaoFactory;
 import com.vlados.model.dao.ProductDao;
 import com.vlados.model.dto.ProductDTO;
 import com.vlados.model.entity.Product;
-import com.vlados.model.entity.SortCriteria;
-import com.vlados.model.exception.DuplicateProductNameException;
-import com.vlados.model.exception.StoreException;
+import com.vlados.model.exception.store_exc.DuplicateProductNameException;
 import com.vlados.model.exception.store_exc.CantDeleteBecauseOfOrderException;
-import com.vlados.model.exception.store_exc.NotEnoughProductsException;
-import com.vlados.model.exception.store_exc.login_exc.UserDoesntExist;
 import com.vlados.model.util.ExceptionKeys;
 import com.vlados.model.util.Page;
 import com.vlados.model.util.Pageable;
@@ -17,8 +13,6 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
-import java.util.List;
-import java.util.Optional;
 
 public class ProductService {
 
@@ -47,7 +41,7 @@ public class ProductService {
 
     public Product findById(long id) {
         try (ProductDao productDao = daoFactory.createProductDao()) {
-            return productDao.findById(id).orElseThrow(()-> {
+            return productDao.findById(id).orElseThrow(() -> {
                 logger.error("Cant find product with id {}", id);
                 throw new RuntimeException();
             });

@@ -1,15 +1,13 @@
 package com.vlados.controller.command.admin;
 
 import com.vlados.controller.command.Command;
+import com.vlados.controller.command.CommandUtility;
 import com.vlados.controller.util.Validator;
 import com.vlados.model.dto.ProductDTO;
-import com.vlados.model.entity.Product;
 import com.vlados.model.exception.StoreException;
 import com.vlados.model.service.ProductService;
 
 import javax.servlet.http.HttpServletRequest;
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.Map;
 
 public class AddProductCommand implements Command {
@@ -25,27 +23,12 @@ public class AddProductCommand implements Command {
 
     @Override
     public String execute(HttpServletRequest request) {
-        ProductDTO productDTO = ProductDTO.builder()
-                .name(request.getParameter("name"))
-                .amount(Integer.parseInt(request.getParameter("amount")))
-                .category(Product.Category.valueOf(request.getParameter("category")))
-                .material(Product.Material.valueOf(request.getParameter("material")))
-                .date(LocalDateTime.now())
-                .description(request.getParameter("description"))
-                .price(new BigDecimal(request.getParameter("price")))
-                .build();
+        ProductDTO productDTO = CommandUtility.buildProductDtoFromRequest(request);
 
         Map<String, String> errors = Validator.validateProducts(productDTO);
 
-        /////////////////////////////
-        //these parameters are needed if there are some problems with thr product
-        request.setAttribute("materials", Product.Material.values());
-        request.setAttribute("categories", Product.Category.values());
-        request.setAttribute("product", productDTO);
-        ///////////////////////
-
         if (errors.size() > 0) {
-            //TODO log
+            CommandUtility.setAttributesIfProblemsWithProductDTO(request, productDTO);
             request.setAttribute("errors", errors);
             return ERROR;
         }
@@ -54,6 +37,7 @@ public class AddProductCommand implements Command {
             productService.addProduct(productDTO);
         }
         catch (StoreException e) {
+            CommandUtility.setAttributesIfProblemsWithProductDTO(request, productDTO);
             request.setAttribute("error_message", e.getMessage());
             return ERROR;
         }
