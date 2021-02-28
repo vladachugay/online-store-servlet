@@ -4,6 +4,7 @@ import com.vlados.model.dao.DaoFactory;
 import com.vlados.model.dao.ProductDao;
 import com.vlados.model.dto.ProductDTO;
 import com.vlados.model.entity.Product;
+import com.vlados.model.exception.store_exc.CantDeleteBecauseOfOrderException;
 import com.vlados.model.exception.store_exc.DuplicateProductNameException;
 import com.vlados.model.util.ExceptionKeys;
 import com.vlados.model.util.Page;
@@ -22,6 +23,7 @@ import java.util.Optional;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.booleanThat;
 import static org.mockito.Mockito.when;
 import static org.junit.Assert.assertEquals;
 
@@ -81,7 +83,7 @@ public class ProductServiceUnitTest {
     }
 
     @Test
-    public void shouldThrowDuplicateProductNameException() {
+    public void shouldThrowDuplicateProductNameExceptionWhileAdding() {
         when(productDao.create(any(Product.class))).thenThrow(RuntimeException.class);
         thrown.expect(DuplicateProductNameException.class);
         thrown.expectMessage(ExceptionKeys.DUPLICATE_PRODUCT_NAME);
@@ -106,5 +108,41 @@ public class ProductServiceUnitTest {
         thrown.expect(RuntimeException.class);
 
         testInstance.findById(WRONG_ID);
+    }
+
+    @Test
+    public void shouldEditProduct() {
+        when(productDao.update(any(Product.class))).thenReturn(true);
+
+        boolean result = testInstance.editProduct(productDTO);
+
+        assertTrue(result);
+    }
+
+    @Test
+    public void shouldThrowDuplicateProductNameExceptionWhileEditing() {
+        when(productDao.update(any(Product.class))).thenThrow(RuntimeException.class);
+        thrown.expect(DuplicateProductNameException.class);
+        thrown.expectMessage(ExceptionKeys.DUPLICATE_PRODUCT_NAME);
+
+        testInstance.editProduct(productDTO);
+    }
+
+    @Test
+    public void shouldDeleteProduct() {
+        when(productDao.delete(ID)).thenReturn(true);
+
+        boolean result = testInstance.deleteById(ID);
+
+        assertTrue(result);
+    }
+
+    @Test
+    public void shouldThrowCantDeleteBecauseOfOrderException() {
+        when(productDao.delete(ID)).thenThrow(RuntimeException.class);
+        thrown.expect(CantDeleteBecauseOfOrderException.class);
+        thrown.expectMessage(ExceptionKeys.CANT_DELETE_BECAUSE_OF_ORDER);
+
+        testInstance.deleteById(ID);
     }
 }
