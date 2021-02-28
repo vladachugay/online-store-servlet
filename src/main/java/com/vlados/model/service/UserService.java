@@ -27,10 +27,7 @@ public class UserService {
 
     public User.Role checkUserAndGetRole(String username, String password) {
         try (UserDao userDao = daoFactory.createUserDao()) {
-            User user = userDao.findByUsername(username).orElseThrow(()-> {
-                logger.error("User with username {} doesnt exits", username);
-                throw new UserDoesntExist(ExceptionKeys.USER_DOESNT_EXIST);
-            });
+            User user = findByUserName(username);
             if (!user.getPassword().equals(passwordEncoder.encode(password))) {
                 logger.error("Wrong password");
                 throw new WrongPasswordException(ExceptionKeys.WRONG_PASSWORD);
@@ -43,13 +40,13 @@ public class UserService {
         }
     }
 
-    public void saveUser(UserDTO userDTO) {
+    public boolean saveUser(UserDTO userDTO) {
         userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
         userDTO.setRole(User.Role.USER.name());
         userDTO.setLocked(false);
 
         try (UserDao userDao = daoFactory.createUserDao()) {
-            userDao.create(new User(userDTO));
+            return userDao.create(new User(userDTO));
         } catch (Exception e) {
             logger.error("Duplicate username ({})", userDTO.getUsername());
             throw new DuplicateUsernameException(ExceptionKeys.DUPLICATE_USERNAME);

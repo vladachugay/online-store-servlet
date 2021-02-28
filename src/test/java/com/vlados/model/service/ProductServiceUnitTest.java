@@ -60,7 +60,6 @@ public class ProductServiceUnitTest {
     @Before
     public void setUp() {
         when(daoFactory.createProductDao()).thenReturn(productDao);
-
     }
 
     @Test
