@@ -4,7 +4,7 @@
 <%@ page isELIgnored="false" %>
 
 <fmt:setLocale value="${sessionScope.lang}"/>
-<fmt:setBundle basename="messages"/>
+<fmt:setBundle basename="lang"/>
 <html lang="${sessionScope.lang}">
 <head>
     <title><fmt:message key="main"/></title>
@@ -31,7 +31,7 @@
 <div class="text-center content-form">
 Here will be some content about my project (Online store).
 </div>
-<
+
 <%@include file="/partials/footer.jspf" %>
 </body>
 </html>

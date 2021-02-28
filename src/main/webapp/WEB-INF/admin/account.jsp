@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="/WEB-INF/tld/mytaglib.tld" prefix="tag" %>
 <%@ page isELIgnored="false" %>
 
 <fmt:setLocale value="${sessionScope.lang}"/>
@@ -80,7 +81,11 @@
             <c:forEach var="order" items="${requestScope.orders}">
                 <tr>
                     <th scope="row"><c:out value="${order.id}"/></th>
-                    <td><c:out value="${order.creationDate}"/></td>
+                    <td>
+                        <tag:date>
+                            <c:out value="${order.creationDate}"/>
+                        </tag:date>
+                    </td>
                     <td><c:out value="${order.totalPrice}"/></td>
                     <td><fmt:message key="${order.status.name()}"/></td>
                 </tr>

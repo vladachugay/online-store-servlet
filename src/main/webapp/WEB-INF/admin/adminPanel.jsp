@@ -8,13 +8,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="/WEB-INF/tld/mytaglib.tld" prefix="tag" %>
 <%@ page isELIgnored="false" %>
 
 <fmt:setLocale value="${sessionScope.lang}"/>
 <fmt:setBundle basename="lang"/>
 <html>
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <style>
         <%@include file="/css/style.css"%>
     </style>
@@ -38,7 +39,6 @@
 <body class="d-flex flex-column min-vh-100">
 <%@include file="/partials/adminNav.jspf" %>
 
-
 <div class="container">
     <a class="btn btn-outline-secondary my-3" href="/admin/users" role="button">
         <fmt:message key="lock_user"/>
@@ -59,28 +59,33 @@
         </thead>
         <tbody>
         <c:forEach var="order" items="${requestScope.orders}">
-        <tr>
-            <th scope="row" >
-                <a href="#"><c:out value="${order.id}"/></a>
-<%--                <a th:href="@{/orders/} + ${order.id}" th:text="${order.id}"></a>--%>
-            </th>
-            <td><c:out value="${order.user.email}"/></td>
-            <td><c:out value="${order.creationDate}"/></td>
-            <td><c:out value="${order.totalPrice}"/></td>
-            <td><fmt:message key="${order.status.name()}"/></td>
-            <td>
-                <c:if test="${order.status.equals(requestScope.registered)}" >
-                    <div class="btn-group" role="group" aria-label="Basic example">
-                        <form method="post" action="/admin/orders/pay/<c:out value="${order.id}"/>">
-                            <button type="submit" class="btn btn-outline-success mr-1"><fmt:message key="order.order.set_paid"/></button>
-                        </form>
-                        <form method="post" action="/admin/orders/cancel/<c:out value="${order.id}"/>">
-                            <button type="submit" class="btn btn-outline-danger ml-1"><fmt:message key="order.cancel"/></button>
-                        </form>
-                    </div>
-                </c:if>
-            </td>
-        </tr>
+            <tr>
+                <th scope="row">
+                    <a href="#"><c:out value="${order.id}"/></a>
+                </th>
+                <td>
+                    <tag:date>
+                        <c:out value="${order.creationDate}"/>
+                    </tag:date>
+                </td>
+                <td><c:out value="${order.user.email}"/></td>
+                <td><c:out value="${order.totalPrice}"/></td>
+                <td><fmt:message key="${order.status.name()}"/></td>
+                <td>
+                    <c:if test="${order.status.equals(requestScope.registered)}">
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                            <form method="post" action="/admin/orders/pay/<c:out value="${order.id}"/>">
+                                <button type="submit" class="btn btn-outline-success mr-1"><fmt:message
+                                        key="order.order.set_paid"/></button>
+                            </form>
+                            <form method="post" action="/admin/orders/cancel/<c:out value="${order.id}"/>">
+                                <button type="submit" class="btn btn-outline-danger ml-1"><fmt:message
+                                        key="order.cancel"/></button>
+                            </form>
+                        </div>
+                    </c:if>
+                </td>
+            </tr>
         </c:forEach>
         </tbody>
     </table>
