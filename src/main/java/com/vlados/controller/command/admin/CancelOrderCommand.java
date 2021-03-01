@@ -17,7 +17,7 @@ public class CancelOrderCommand implements Command {
     @Override
     public String execute(HttpServletRequest request) {
         String[] parts = request.getRequestURI().split("/");
-        orderService.closeOrderById(Long.parseLong(parts[parts.length - 1]));
+        orderService.cancelOrderById(Long.parseLong(parts[parts.length - 1]));
         return "redirect:/admin";
     }
 }

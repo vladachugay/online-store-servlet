@@ -1,13 +1,9 @@
 package com.vlados.model.service;
 
-import com.atomikos.icatch.jta.UserTransactionImp;
 import com.vlados.model.dao.DaoFactory;
 import com.vlados.model.dao.OrderDao;
 import com.vlados.model.entity.*;
 
-import javax.transaction.NotSupportedException;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -15,12 +11,10 @@ import java.util.Map;
 public class OrderService {
 
     private final DaoFactory daoFactory;
-    private final ProductService productService;
     private final UserService userService;
 
-    public OrderService(final DaoFactory daoFactory, final ProductService productService, final UserService userService) {
+    public OrderService(final DaoFactory daoFactory, final UserService userService) {
         this.daoFactory = daoFactory;
-        this.productService = productService;
         this.userService = userService;
     }
 
@@ -45,14 +39,14 @@ public class OrderService {
         }
     }
 
-    public void fillOrderProducts(Cart cart, Order order) {
+    private void fillOrderProducts(Cart cart, Order order) {
         for (Map.Entry<Product, Integer> pair : cart.getCartProducts().entrySet()) {
             order.getOrderProducts().add(new OrderProducts(order, pair.getKey(), pair.getValue()));
         }
     }
 
 
-    public boolean closeOrderById(long id) {
+    public boolean cancelOrderById(long id) {
         try (OrderDao orderDao = daoFactory.createOrderDao()) {
             return orderDao.cancelOrderById(id);
         }

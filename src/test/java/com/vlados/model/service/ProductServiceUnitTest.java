@@ -23,7 +23,6 @@ import java.util.Optional;
 
 import static org.junit.Assert.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.booleanThat;
 import static org.mockito.Mockito.when;
 import static org.junit.Assert.assertEquals;
 
@@ -42,7 +41,7 @@ public class ProductServiceUnitTest {
     public ExpectedException thrown = ExpectedException.none();
 
     @Mock
-    private Page page;
+    private Page<Product> page;
     @Mock
     private ProductDao productDao;
     @Mock
@@ -67,7 +66,7 @@ public class ProductServiceUnitTest {
         when(productDao.findFiltered(pageable, SORT_CRITERIA, CATEGORY, MATERIAL, PRICE_FROM, PRICE_TO))
                 .thenReturn(page);
 
-        Page result = testInstance.getFilteredProducts(pageable, SORT_CRITERIA, CATEGORY, MATERIAL, PRICE_FROM, PRICE_TO);
+        Page<Product> result = testInstance.getFilteredProducts(pageable, SORT_CRITERIA, CATEGORY, MATERIAL, PRICE_FROM, PRICE_TO);
 
         assertEquals(page, result);
     }

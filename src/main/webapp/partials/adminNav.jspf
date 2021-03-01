@@ -26,7 +26,7 @@
             <li class="nav-item active">
                 <div class="dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="drop" role="button"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> My account
+                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><fmt:message key="my_account"/>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="/admin/account"><fmt:message key="my_account"/></a></li>

@@ -11,7 +11,7 @@ public class ServiceFactoryImpl extends ServiceFactory {
 
     @Override
     public OrderService createOrderService() {
-        return new OrderService(DaoFactory.getInstance(), createProductService(), createUserService());
+        return new OrderService(DaoFactory.getInstance(), createUserService());
     }
 
     @Override

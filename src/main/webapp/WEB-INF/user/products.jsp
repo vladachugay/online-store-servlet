@@ -42,7 +42,7 @@
 <div class="container">
     <a class="btn btn-outline-secondary my-3" data-toggle="collapse" href="#collapseExample" role="button"
        aria-expanded="false" aria-controls="collapseExample">
-        Sort&Filter
+        <fmt:message key="sort_filter"/>
     </a>
     <div class="collapse my-3" id="collapseExample">
         <div class="form-group mt-3">
@@ -80,7 +80,7 @@
                     </select>
                 </div>
                 <div class="col-md-3">
-                    Price between
+                    <fmt:message key="price_between"/>
                     <div class="form-group input-group-sm">
                         <label for="price_from"><fmt:message key="price_from"/></label>
                         <input type="number" min="0" max="100000" required name="price_from" id="price_from" class="form-control"
